@@ -1,5 +1,6 @@
 ﻿//BIG DISCLAIMER: THIS CODE TAKEN VERBATIM FROM: http://davidknopp.net/code-samples/indexed-priority-queue-c-unity/
 using System;
+using UnityEngine;
 using UnityEngine.Assertions;
 
     public sealed class PriorityQueue<T> where T : IComparable
@@ -39,9 +40,9 @@ using UnityEngine.Assertions;
         /// value to insert
         public void Insert(int index, T value)
         {
+            //Debug.Log("Attempting insert");
             Assert.IsTrue(index < m_objects.Length && index >= 0,
                            string.Format("IndexedPriorityQueue.Insert: Index '{0}' out of range", index));
-
             ++m_count;
 
             // add object
@@ -50,9 +51,9 @@ using UnityEngine.Assertions;
             // add to heap
             m_heapInverse[index] = m_count;
             m_heap[m_count] = index;
-
             // update heap
             SortHeapUpward(m_count);
+            //Debug.Log("Actually inserting");
         }
 
         /// 
@@ -71,6 +72,7 @@ using UnityEngine.Assertions;
         /// The removed element
         public T Pop()
         {
+        //Debug.Log("Attempting pop");
             Assert.IsTrue(m_count > 0, "IndexedPriorityQueue.Pop: Queue is empty");
 
             if (m_count == 0)
@@ -83,7 +85,7 @@ using UnityEngine.Assertions;
 
             // re-sort heap
             SortHeapDownward(1);
-
+            //Debug.Log("Popping " + m_objects[m_heap[m_count + 1]]);
             // return popped object
             return m_objects[m_heap[m_count + 1]];
         }

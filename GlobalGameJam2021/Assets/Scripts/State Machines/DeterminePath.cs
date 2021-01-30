@@ -6,20 +6,36 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "AI/DeterminePath")]
 public class DeterminePath : BaseState
 {
+    Dictionary<Vector2Int, Vector2Int> parentDict;
     public class HeapNode : IComparable
     {
-
-        Vector2Int position;
+        
+        public Vector2Int position;
         Vector2Int dest;
-        public HeapNode(int depth, Vector2Int destination, Vector2Int curPos)
+        public int pathCost;
+        float heuristic;
+        public float f;
+        public HeapNode(int depth, Vector2Int curPos, Vector2Int destination)
         {
             position = curPos;
             dest = destination;
+            pathCost = depth;
+            heuristic = getHeuristic();
+            f = getF();
+        }
+        private float getHeuristic()
+        {
+            return Vector2Int.Distance(position, dest);
+        }
+        private float getF()
+        {
+            return heuristic + pathCost;
         }
         public int CompareTo(object obj)
         { 
             HeapNode other = obj as HeapNode;
-            return -1;
+            int ret = f.CompareTo(other.f);
+            return ret;
 
         }
     }
@@ -27,46 +43,159 @@ public class DeterminePath : BaseState
     public MapGenerator mapStance;
     protected override void childEnter(ThiefAI cur)
     {
-        mapStance = MapGenerator.instance;   
+        mapStance = MapGenerator.instance;
+
     }
     private float heuristic(Vector2Int src, Vector2Int dest)
     {
         return Vector2Int.Distance(src, dest);
     }
+    private bool isIntersection(bool[,] roads, Vector2Int position)
+    {
+        int nodeX = position.x;
+        int nodeY = position.y;
+        if(nodeX < 0 || nodeY < 0 || nodeX >= roads.GetLength(0) || nodeY >= roads.GetLength(1))
+        {
+            return false;
+        }
+        bool pass = false;
+        pass |= (nodeX + 1 < roads.GetLength(0) && nodeY + 1 < roads.GetLength(1) && (roads[nodeX + 1, nodeY] && roads[nodeX, nodeY + 1]));  //right and up
+        pass |= (nodeX + 1 < roads.GetLength(0) && nodeY - 1 >= 0 && (roads[nodeX + 1, nodeY] && roads[nodeX, nodeY - 1])); // right and down
+        pass |= (nodeX - 1 >= 0 && nodeY + 1 < roads.GetLength(1) && (roads[nodeX - 1, nodeY] && roads[nodeX, nodeY + 1])); // left and up
+        pass |= (nodeX - 1 >= 0 && nodeY -1 >= 0 && (roads[nodeX - 1, nodeY] && roads[nodeX, nodeY - 1]));  // left and down
+        return pass;
+    }
+    private Vector2Int getAdjacentRoad(bool [,] roads, Vector2Int position)
+    {
+        int nodeX = position.x;
+        int nodeY = position.y;
+        if(roads[nodeX-1,nodeY])
+        {
+            return new Vector2Int(nodeX-1,nodeY);
+        }
+        else if(roads[nodeX+1,nodeY])
+        {
+            return new Vector2Int(nodeX+1,nodeY);
+        }
+        else if(roads[nodeX,nodeY-1])
+        {
+            return new Vector2Int(nodeX, nodeY - 1);
+        }
+        else
+        {
+            return new Vector2Int(nodeX, nodeY + 1);
+        }
+    }
     public override IEnumerator Perform()
     {
         yield return null;
+        parentDict = new Dictionary<Vector2Int, Vector2Int>();
         Vector2Int dest = self.getDestination();
+
         Vector3 pos = self.getPos();
         bool[,] roads = mapStance.roads;
-
+        dest = getAdjacentRoad(roads, dest);
+        Vector2Int convertedPos = new Vector2Int(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.z));
+        Debug.Log("Current position is " + convertedPos);
+        Debug.Log("Destination is " + dest);
         //Tuple<Vector2Int, Vector2Int> node;
-        PriorityQueue<(int, Vector2Int)> nodes = new PriorityQueue<(int, Vector2Int)>(1000);
-        nodes.Insert(1, (0, new Vector2Int(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.z))));
+        PriorityQueue<HeapNode> nodes = new PriorityQueue<HeapNode>(1000);
+        nodes.Insert(1, new HeapNode(0, convertedPos,dest));
+        Vector2Int finalPos = dest;
+        int index = 0;
         while(nodes.Count > 0)
         {
+            //Debug.Log("On iteration " + index);
             var node = nodes.Pop();
-            int nodeX = node.Item2.x;
-            int nodeY = node.Item2.y;
+            //Debug.Log(nodes);
+            //Debug.Log("This line runs.");
+            //Debug.Log("Exploring position: " + node.position);
+            //Debug.Log("current f is " + node.f);
+            int nodeX = node.position.x;
+            int nodeY = node.position.y;
+            if(node.position == dest)
+            {
+                finalPos = node.position;
+                break;
+            }
+            Vector2Int left = new Vector2Int(nodeX - 1, nodeY);
+            if (node.f > 16)
+            {
+                while (left.x >= 0 && !isIntersection(roads, left))
+                {
+                    left = new Vector2Int(left.x - 1, nodeY);
+                }
+            }
+            Vector2Int right = new Vector2Int(nodeX + 1, nodeY);
+            if (node.f > 16)
+            {
+                while (right.x < roads.GetLength(0) && !isIntersection(roads, right))
+                {
+                    right = new Vector2Int(right.x + 1, nodeY);
+                }
+            }
+            Vector2Int up = new Vector2Int(nodeX, nodeY + 1);
+            if (node.f > 16)
+            {
+                while (up.y < roads.GetLength(1) && !isIntersection(roads, up))
+                {
+                    up = new Vector2Int(nodeX, up.y + 1);
+                }
+
+            }
+            Vector2Int down = new Vector2Int(nodeX, nodeY - 1);
+            if (node.f > 16)
+            {
+                while (down.y >= 0 && !isIntersection(roads, down))
+                {
+                    down = new Vector2Int(nodeX, down.y - 1);
+                }
+            }
+            //left
+            if (nodeX - 1 >= 0 && !parentDict.ContainsKey(left))
+            {
+                //Debug.Log("Left is valid");
+                nodes.Insert(index++, new HeapNode(node.pathCost + 1, left, dest));
+                parentDict.Add(left, node.position);
+            }
             //right
-            if(nodeX - 1 > 0)
+            if(nodeX + 1 < roads.GetLength(0) && !parentDict.ContainsKey(right))
             {
-                nodes.Insert(1, (node.Item1 + 1, new Vector2Int(nodeX - 1, nodeY)));
-            }
-            if(nodeX + 1 < roads.GetLength(0))
+                //Debug.Log("right is valid");
+                nodes.Insert(index++, new HeapNode(node.pathCost + 1, right, dest));
+                parentDict.Add(right, node.position);
+            }//up
+            if (nodeY + 1 < roads.GetLength(1) && !parentDict.ContainsKey(up))
             {
-                nodes.Insert(1, (node.Item1 + 1, new Vector2Int(nodeX + 1, nodeY)));
-            }
-            if (nodeY + 1 < roads.GetLength(1))
+                //Debug.Log("Up is valid");
+                nodes.Insert(index++, new HeapNode(node.pathCost + 1, up, dest));
+                parentDict.Add(up, node.position);
+            }//down
+            if (nodeY - 1 >= 0 && !parentDict.ContainsKey(down))
             {
-                nodes.Insert(1, (node.Item1 + 1, new Vector2Int(nodeX, nodeY+1)));
+                //Debug.Log("down is valid");
+                nodes.Insert(index++, new HeapNode(node.pathCost + 1, down, dest));
+                parentDict.Add(down, node.position);
             }
-            if (nodeY - 1 > 0)
-            {
-                nodes.Insert(1, (node.Item1 + 1, new Vector2Int(nodeX, nodeY - 1)));
-            }
+            index += 1;
         }
-        Debug.Log(nodes.Top());
+        nodes.Clear();
+        Debug.Log("Loop exited");
+        Stack<Vector2Int> path = new Stack<Vector2Int>();
+        while(parentDict.ContainsKey(finalPos))
+        {
+            path.Push(finalPos);
+            var temp = finalPos;
+            finalPos = parentDict[finalPos];
+            parentDict.Remove(temp);
+        }
+        self.setPositions(path);
+        /*
+        foreach(Vector2Int posit in path)
+        {
+            Debug.Log(posit);
+        }*/
+        //yield return null;
     }
     protected override void Exit()
     {

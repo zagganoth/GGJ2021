@@ -17,6 +17,7 @@ public class BaseState : ScriptableObject
     {
         self = cur;
         childEnter(cur);
+        //Perform();
     }
     
     public virtual IEnumerator Perform()

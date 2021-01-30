@@ -24,12 +24,13 @@ public class MapGenerator : MonoBehaviour
             Destroy(this.gameObject);
         }
         instance = this;
+        destinationLocations = new HashSet<Vector2Int>();
     }
     // Start is called before the first frame update
     void Start()
     {
         roads = new bool[map_width,map_height];
-        destinationLocations = new HashSet<Vector2Int>();
+
         for(int i = 0; i < map_width; i++)
         {
             for(int j = 0; j < map_height; j++)
