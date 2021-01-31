@@ -131,9 +131,9 @@ MonoBehaviour:
   colorIndex: 0
   vehicleIndex: 0
   startState: {fileID: 11400000, guid: 3c2faf7d0b090aa40a25792cdcc3cb32, type: 2}
-  speed: 1
+  speed: 3
   loopAfterVisitingAll: 1
-  onlyVisitDestinationsOnce: 0
+  onlyVisitDestinationsOnce: 1
 --- !u!65 &7380950687492217929
 BoxCollider:
   m_ObjectHideFlags: 0

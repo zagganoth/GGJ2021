@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8382616268397775041}
   - component: {fileID: 1103960709728278180}
+  - component: {fileID: 689632156}
   m_Layer: 0
   m_Name: GameSession
   m_TagString: Untagged
@@ -43,8 +44,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9091306bf3b96114f9052a326535aaf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameLength: 10
+  gameLength: 15
   hintInterval: 5
-  redCriminal: {fileID: 0}
-  blueCriminal: {fileID: 0}
-  yellowCriminal: {fileID: 0}
+  criminal: {fileID: -8290473095202016171, guid: 8f7cd4817ae99fe4caf4637af82166c8,
+    type: 3}
+--- !u!114 &689632156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5647785735439404730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd5701a79ce6b6c47bd301db977111a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hintNumberOne: {fileID: 0}
+  hintNumberTwo: {fileID: 0}

@@ -125,7 +125,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: add5f4c70c43e5a4383c8c5dd66eb5c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  curStraightDest: {x: 0, y: 0, z: 0}
+  isThief: 0
+  colorIndex: 0
+  vehicleIndex: 0
   startState: {fileID: 11400000, guid: 3c2faf7d0b090aa40a25792cdcc3cb32, type: 2}
-  speed: 1
+  speed: 3
   loopAfterVisitingAll: 1
-  noVisit: 0
+  onlyVisitDestinationsOnce: 1

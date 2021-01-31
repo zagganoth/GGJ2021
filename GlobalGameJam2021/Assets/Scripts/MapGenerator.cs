@@ -7,6 +7,7 @@ public class MapGenerator : MonoBehaviour
     public bool[,] roads;
     public HashSet<Vector2Int> destinationLocations;
     public static MapGenerator instance;
+    public GameSession gameSession;
 
     int placedDestinations = 0;
 
@@ -36,9 +37,9 @@ public class MapGenerator : MonoBehaviour
     [Header("Possible Textures")]
     public List<Texture2D> possibleCarTextures;
 
-    int normieCount = 0;
-    int targetNormieCount = 60;
-    int maxNormieCount = 60;
+    public int normieCount = 0;
+    public int targetNormieCount = 60;
+    public int maxNormieCount = 60;
 
     private void Awake()
     {
@@ -54,6 +55,7 @@ public class MapGenerator : MonoBehaviour
     void Start()
     {
         roads = new bool[map_width,map_height];
+        bool placedCriminal = false;
 
         for(int i = 0; i < map_width; i++)
         {
@@ -75,6 +77,12 @@ public class MapGenerator : MonoBehaviour
                         obj.GetComponent<ThiefAI>().colorIndex = randomColor;
                         obj.GetComponent<ThiefAI>().vehicleIndex = random;
                         obj.transform.SetParent(trafficParent);
+                        if(!placedCriminal){
+                            obj.GetComponent<ThiefAI>().isThief = true;
+                            placedCriminal = true;
+                            obj.transform.localScale = new Vector3(1, 10, 1);
+                            gameSession.currentCriminal = obj.GetComponent<ThiefAI>();
+                        }
                     }
                 }
                 

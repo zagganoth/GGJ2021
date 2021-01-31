@@ -13,10 +13,10 @@ public class ThiefAI : MonoBehaviour
     bool pathActive;
 
     [Header("Agent settings")]
-    [SerializeField]
-    bool isThief = false;
+    public bool isThief = false;
     public int colorIndex = 0;
     public int vehicleIndex = 0;
+    public BaseState currentState;
     
     [SerializeField]
     BaseState startState;
@@ -41,6 +41,7 @@ public class ThiefAI : MonoBehaviour
         var clone = Instantiate(newState);
         clone.Enter(this);
         StartCoroutine(clone.Perform());
+        currentState = newState;
     }
 
     public void setDestination(Vector2Int dest)
@@ -72,7 +73,7 @@ public class ThiefAI : MonoBehaviour
     }
     public bool hasVisitedEverything()
     {
-        return visitedEverything;
+        return visitedEverything && onlyVisitDestinationsOnce;
     }
     IEnumerator clearVisited()
     {
