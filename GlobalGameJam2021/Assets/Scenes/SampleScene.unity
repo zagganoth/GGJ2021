@@ -796,6 +796,7 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 4b7fa9b69e9c94542b79f7e6ecaa8ad9, type: 3}
   - {fileID: 2800000, guid: eb43cbc5d630505478ac481db78e83b3, type: 3}
   - {fileID: 2800000, guid: 8f2a196c23a01bc4a9f093eda413f094, type: 3}
+  red: {fileID: 2100000, guid: 0b67de4a1bd3b2248b4779dedab20bcc, type: 2}
   normieCount: 0
   targetNormieCount: 30
   maxNormieCount: 100
