@@ -7,6 +7,7 @@ public class MapGenerator : MonoBehaviour
 {
     public bool[,] roads;
     public Dictionary<Vector2Int, GameObject> destinations;
+    public Dictionary<Vector2Int, GameObject> normalBuildings;
     public static MapGenerator instance;
     public GameSession gameSession;
 
@@ -52,6 +53,7 @@ public class MapGenerator : MonoBehaviour
         }
         instance = this;
         destinations = new Dictionary<Vector2Int, GameObject>();
+        normalBuildings = new Dictionary<Vector2Int, GameObject>();
         bannerText.text = "Warning! Wanted robber on the loose, keep an eye on any high profile buildings!";
     }
     public void updateBanner(string robbedBuilding, bool isStealing)
@@ -63,7 +65,7 @@ public class MapGenerator : MonoBehaviour
     {
         roads = new bool[map_width,map_height];
         bool placedCriminal = false;
-
+        Vector3 lastSpawnLoc = new Vector3(0,0,0);
         for(int i = 0; i < map_width; i++)
         {
             for(int j = 0; j < map_height; j++)
@@ -75,11 +77,12 @@ public class MapGenerator : MonoBehaviour
                     roads[i, j] = true;
 
 
-                    if (normieCount<maxNormieCount && Random.Range(0.0f, 1.0f) >= normieCount/targetNormieCount){
+                    if (normieCount<maxNormieCount && (Random.Range(0.0f, 1.0f) >= normieCount/targetNormieCount) && Vector3.Distance(new Vector3(i,0,j),lastSpawnLoc) > 2.5f){
                         normieCount++;
                         int random = Random.Range(0, normiePrefabs.Count);
                         int randomColor = Random.Range(0, possibleCarTextures.Count);
-                        var obj = Instantiate(normiePrefabs[random], new Vector3(i, 0, j), Quaternion.identity);
+                        lastSpawnLoc = new Vector3(i, 0, j);
+                        var obj = Instantiate(normiePrefabs[random], lastSpawnLoc, Quaternion.identity);
                         obj.GetComponentInChildren<MeshRenderer>().material.SetTexture("_MainTex",possibleCarTextures[randomColor]);
                         obj.GetComponent<ThiefAI>().colorIndex = randomColor;
                         obj.GetComponent<ThiefAI>().vehicleIndex = random;
@@ -137,6 +140,7 @@ public class MapGenerator : MonoBehaviour
                 
                 if (!roads[i,j] && !destinations.ContainsKey(new Vector2Int(i, j))) { 
                     var bld = Instantiate(buildingPrefab, new Vector3(i, 0.1f, j), Quaternion.identity);
+                    normalBuildings.Add(new Vector2Int(i, j), bld);
                     bld.transform.SetParent(buildingsParent);
                 }
                 if (!roads[i,j]) { 

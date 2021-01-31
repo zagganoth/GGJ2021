@@ -139,35 +139,32 @@ public class ThiefAI : MonoBehaviour
                         pathActive = false;
                     }
                 }
-                Vector3 newPos = Vector3.MoveTowards(transform.position, curStraightDest, speed * Time.deltaTime);
-                //Debug.Log("Position is " + transform.position);
-                //Debug.Log("Moving to " + curStraightDest);
+                Vector3 direction = (curStraightDest - transform.position).normalized;
+                float speedModifier = 1;
+                RaycastHit hit;
+                if (Physics.Raycast(transform.position, direction, out hit, 1f))
+                {
+                    speedModifier = 0.5f;
+                }
+                Vector3 newPos = Vector3.MoveTowards(transform.position, curStraightDest, speed * Time.deltaTime * speedModifier);
+
+                
                 if(pathActive){
                     if (curStraightDest.x > transform.position.x) //right
                     {
-                        //Debug.Log("Rotating right");
-                        //transform.rotation = new Quaternion(transform.rotation.x, 270, transform.rotation.z, transform.rotation.w);
                         transform.eulerAngles = new Vector3(transform.eulerAngles.x, 270 , transform.eulerAngles.z);
-                        //Debug.Log(transform.rotation.y);
                     }
                     else if (curStraightDest.x < transform.position.x) // left
                     {
-                        //Debug.Log("Rotating left");
                         transform.eulerAngles = new Vector3(transform.eulerAngles.x, 90, transform.eulerAngles.z);
-                        //transform.rotation = new Quaternion(transform.rotation.x, 90, transform.rotation.z, transform.rotation.w);
-                        //Debug.Log(transform.rotation.y);
                     }
                     else if (curStraightDest.z < transform.position.z) // down 
                     {
-                        //Debug.Log("Rotating down");
-                        //transform.rotation = new Quaternion(transform.rotation.x, 0, transform.rotation.z, transform.rotation.w);
                         transform.eulerAngles = new Vector3(transform.eulerAngles.x,  0, transform.eulerAngles.z);
                     }
                     else if(curStraightDest.z > transform.position.z) // up 
                     {
-                        //Debug.Log("Rotating up");
                         transform.eulerAngles = new Vector3(transform.eulerAngles.x, 180, transform.eulerAngles.z);
-                        //transform.rotation = new Quaternion(transform.rotation.x, 180, transform.rotation.z, transform.rotation.w);
                     }
                 }
 

@@ -91,7 +91,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8023968293035196987}
   - component: {fileID: 8023968293035196991}
-  - component: {fileID: 1313259029425632755}
+  - component: {fileID: 2902994081801547980}
   m_Layer: 0
   m_Name: Normie Prefab
   m_TagString: Untagged
@@ -134,11 +134,11 @@ MonoBehaviour:
   vehicleIndex: 0
   currentState: {fileID: 0}
   startState: {fileID: 11400000, guid: 3c2faf7d0b090aa40a25792cdcc3cb32, type: 2}
-  speed: 0.4
+  speed: 0.2
   loopAfterVisitingAll: 1
   onlyVisitDestinationsOnce: 1
   state: {fileID: 0}
---- !u!65 &1313259029425632755
+--- !u!65 &2902994081801547980
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,5 +149,5 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.2, y: 0.4, z: 0.15}
-  m_Center: {x: -0.41, y: 0.15, z: 0}
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
