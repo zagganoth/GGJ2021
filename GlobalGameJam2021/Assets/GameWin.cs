@@ -1,22 +1,21 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class GameOver : MonoBehaviour
+public class GameWin : MonoBehaviour
 {
-
-    [SerializeField] Canvas gameOverCanvas;
+    [SerializeField] Canvas gameWinCanvas;
 
     void Start()
     {
-        gameOverCanvas.enabled = false;
+        gameWinCanvas.enabled = false;
     }
 
-    public void GameOverUI()
+    public void GameWinUI()
     {
-        gameOverCanvas.enabled = true;
+        gameWinCanvas.enabled = true;
     }
 
     public void RestartGame()
@@ -28,6 +27,7 @@ public class GameOver : MonoBehaviour
     {
         Application.Quit();
     }
+
 
 
 }

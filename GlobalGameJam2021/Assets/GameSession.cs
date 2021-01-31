@@ -8,6 +8,8 @@ public class GameSession : MonoBehaviour
 {
     HintSystem hintSystem;
     [SerializeField] Canvas detailsPanel;
+    [SerializeField] Canvas cooldownPanel;
+
     //TIMER CODE
     private TimeSpan gameTime;
     private TimeSpan gameDuration;
@@ -28,8 +30,10 @@ public class GameSession : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1;
         reportCooldownActive = false;
         detailsPanel.enabled = false;
+        cooldownPanel.enabled = false;
         BeginTimer();
         hintSystem = FindObjectOfType<HintSystem>();
     }
@@ -75,16 +79,20 @@ public class GameSession : MonoBehaviour
         if (!reportCooldownActive) {
             if (currentAccusation == currentCriminal)
             {
-                Debug.Log("You did it!");
+                Time.timeScale = 0;
+                GetComponent<GameWin>().GameWinUI();
             }
             else
             {
+                cooldownPanel.enabled = true;
+                cooldownPanel.GetComponent<MessageCanvas>().DisplayNotHereMsg();
+                cooldownPanel.GetComponent<MessageCanvas>().DisplayCooldown(reportCooldown);
                 StartCoroutine(ReportCooldown());
             }
         }
         else
         {
-            Debug.Log("Cannot dispatch police. Please wait a few seconds");
+            cooldownPanel.enabled = true;
         }
     }
     private IEnumerator ReportCooldown()
@@ -92,7 +100,7 @@ public class GameSession : MonoBehaviour
         reportCooldownActive = true;
         yield return new WaitForSeconds(reportCooldown);
         reportCooldownActive = false;
-
+        cooldownPanel.enabled = false;
     }
     private IEnumerator StartGameTimer()
     {
@@ -123,7 +131,7 @@ public class GameSession : MonoBehaviour
 
     private void GameOver()
     {
-        print("the game is over");
+        Time.timeScale = 0;
         GetComponent<GameOver>().GameOverUI();
     }
 
