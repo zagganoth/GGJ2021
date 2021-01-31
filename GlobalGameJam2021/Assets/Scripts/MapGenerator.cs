@@ -52,11 +52,11 @@ public class MapGenerator : MonoBehaviour
         }
         instance = this;
         destinations = new Dictionary<Vector2Int, GameObject>();
-        bannerText.text = "Warning! Wanted robber on the loose, keep an eye on any high profile buildings!.";
+        bannerText.text = "Warning! Wanted robber on the loose, keep an eye on any high profile buildings!";
     }
     public void updateBanner(string robbedBuilding, bool isStealing)
     {
-        bannerText.text = isStealing ? "Warning! A thief is currently robbing a " + robbedBuilding : "Warning! A thief has just stolen from a " + robbedBuilding;
+        bannerText.text = isStealing ? "Warning! The thief is currently robbing a " + robbedBuilding : "Warning! The thief has just stolen from a " + robbedBuilding;
     }
     // Start is called before the first frame update
     void Start()
@@ -108,6 +108,19 @@ public class MapGenerator : MonoBehaviour
                     || roads[randomI,randomJ+1] || roads[randomI,randomJ-1] || roads[randomI + 1, randomJ -1] 
                     || roads[randomI - 1,randomJ +1] || roads[randomI+1,randomJ+1] || roads[randomI-1,randomJ-1])) && !destinations.ContainsKey(pos))
                 {
+                    bool tooClose = false;
+                    foreach(var destination in destinations)
+                    {
+                        if(Vector2Int.Distance(destination.Key,pos) < 4f)
+                        {
+                            tooClose = true;
+                            break;
+                        }
+                    }
+                    if(tooClose)
+                    {
+                        continue;
+                    }
                     var dest = Instantiate(destinationPrefabs[placedDestinations], new Vector3(randomI, 0.1f, randomJ), Quaternion.identity);
                     placedDestinations = (placedDestinations + 1) % destinationPrefabs.Count;
                     
