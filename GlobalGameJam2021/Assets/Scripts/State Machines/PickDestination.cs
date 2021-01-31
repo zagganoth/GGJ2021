@@ -11,14 +11,11 @@ public class PickDestination : BaseState
     {
         mapStance = MapGenerator.instance;
     }
-
-    public override IEnumerator Perform()
+    private void PickThiefDestination()
     {
-        yield return null;
-
         HashSet<Vector2Int> visited = self.getVisitedLocations();
 
-        if(visited.Count == mapStance.destinations.Count)
+        if (visited.Count == mapStance.destinations.Count)
         {
             self.setVisitedEverything();
             Exit();
@@ -33,7 +30,7 @@ public class PickDestination : BaseState
         }
         int locInt = Random.Range(0, visitable.Count);
         int curIndex = 0;
-        foreach(var loc in visitable)
+        foreach (var loc in visitable)
         {
             if (curIndex == locInt)
             {
@@ -42,6 +39,36 @@ public class PickDestination : BaseState
                 break;
             }
             curIndex++;
+        }
+    }
+    public override IEnumerator Perform()
+    {
+        yield return null;
+        if (self.isThief)
+        {
+            PickThiefDestination();
+        }
+        else
+        {
+            bool[,] notAllowed = mapStance.roads;
+            int randomI = Random.Range(0, notAllowed.GetLength(0));
+            int randomJ = Random.Range(0, notAllowed.GetLength(1));
+            Vector2Int loc = new Vector2Int(randomI, randomJ);
+            while (!mapStance.normalBuildings.ContainsKey(loc) && !mapStance.destinations.ContainsKey(loc))
+            {
+                randomI = Random.Range(0, notAllowed.GetLength(0));
+                randomJ = Random.Range(0, notAllowed.GetLength(1));
+                loc = new Vector2Int(randomI, randomJ);
+            }
+            if (mapStance.normalBuildings.ContainsKey(loc))
+            {
+                self.setDestination(loc, mapStance.normalBuildings[loc]);
+            }
+            else
+            {
+                self.setDestination(loc, mapStance.destinations[loc]);
+            }
+            self.visitLocation(loc);
         }
         Exit();
     }
