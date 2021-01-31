@@ -17,12 +17,13 @@ public class MapGenerator : MonoBehaviour
     GameObject destinationPrefab;
     public HashSet<Vector2Int> destinationLocations;
     public static MapGenerator instance;
-    [SerializeField]
-    GameObject normiePrefab;
+
     [SerializeField]
     GameObject buildingPrefab;
     [SerializeField]
     public int gridSize;
+    [SerializeField]
+    public List<GameObject> normiePrefabs;
     private void Awake()
     {
         if(instance && instance != this)
@@ -31,6 +32,7 @@ public class MapGenerator : MonoBehaviour
         }
         instance = this;
         destinationLocations = new HashSet<Vector2Int>();
+
     }
     // Start is called before the first frame update
     void Start()
@@ -85,7 +87,8 @@ public class MapGenerator : MonoBehaviour
         while(true)
         {
             yield return new WaitForSeconds(5f);
-            Instantiate(normiePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+            int random = Random.Range(0, normiePrefabs.Count);
+            Instantiate(normiePrefabs[random], new Vector3(0, 0, 0), Quaternion.identity);
         }
         //yield return null;
     }

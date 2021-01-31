@@ -75,6 +75,8 @@ public class ThiefAI : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         visitedEverything = false;
+        visitedLocations = new HashSet<Vector2Int>();
+        changeState(startState);
     }
     private Vector3 getAdjacentRoad(bool[,] roads, Vector3 position)
     {

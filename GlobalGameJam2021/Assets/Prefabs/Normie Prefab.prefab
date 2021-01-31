@@ -127,5 +127,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startState: {fileID: 11400000, guid: 3c2faf7d0b090aa40a25792cdcc3cb32, type: 2}
   speed: 1
-  loopAfterVisitingAll: 0
+  loopAfterVisitingAll: 1
   noVisit: 0
