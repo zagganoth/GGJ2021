@@ -7,6 +7,7 @@ using TMPro;
 public class HintSystem : MonoBehaviour
 {
     System.Random random = new System.Random();
+    MapGenerator mapInstance;
     int randomHint;
     ThiefAI currentCriminal;
 
@@ -22,6 +23,12 @@ public class HintSystem : MonoBehaviour
 
     public string[] colorNames;
     public string[] vehicleNames;
+    public string[] horzStreetNames;
+    public string[] vertStreetNames;
+
+    private void Start() {
+        mapInstance = MapGenerator.instance;
+    }
 
     public void SendHint()
     {
@@ -29,12 +36,12 @@ public class HintSystem : MonoBehaviour
         if (hintSlot1 == 0)
         {
             hintNumberOne.text = GetTrueHint();
-            hintNumberTwo.text = GetFalseHint();
+            hintNumberTwo.text = GetTrueHint();//GetFalseHint();
         }
         else if (hintSlot1 == 1)
         {
             hintNumberOne.text = GetFalseHint();
-            hintNumberTwo.text = GetTrueHint();
+            hintNumberTwo.text = GetTrueHint();//GetTrueHint();
         }
     }
 
@@ -66,18 +73,28 @@ public class HintSystem : MonoBehaviour
     private void BuildFalseHintsList()
     {
         falseHints.Add(GetColorHint(false));
+        falseHints.Add(GetVehicleHint(false));
+        falseHints.Add(GetSightingHint(false));
     }
 
     private void BuildTrueHintsList()
     {
         trueHints.Add(GetColorHint(true));
-        trueHints.Add(TrueSighting());
+        trueHints.Add(GetVehicleHint(true));
+        trueHints.Add(GetSightingHint(true));
     }
 
-    private string TrueSighting()
+    private string GetSightingHint(bool truth)
     {
         GetCurrentCriminal();
-        return "The suspect was last seen at " + currentCriminal.transform.position;
+        Vector3 pos;
+        if(truth){
+            pos = currentCriminal.transform.position;
+        }else{
+            pos = new Vector3 (random.Next(0, mapInstance.map_width), 0, random.Next(0, mapInstance.map_height));
+        }
+        pos = pos/mapInstance.gridSize;
+        return "The suspect was last seen at the crossing of " + horzStreetNames[(int)pos.z] + " and " + vertStreetNames[(int)pos.x];
     }
 
     string GetColorHint(bool truth){
@@ -90,7 +107,20 @@ public class HintSystem : MonoBehaviour
                 colorIndex = random.Next(0, colorNames.Length-1);
             }
         }
-        return "The suspect was last seen wearing a " + colorNames[colorIndex] + " coloured shirt";
+        return "The suspect was last seen in a " + colorNames[colorIndex] + " coloured vehicle";
+    }
+
+    string GetVehicleHint(bool truth){
+        GetCurrentCriminal();
+        int vehicleIndex = 0;
+        if(truth){
+            vehicleIndex = currentCriminal.vehicleIndex;
+        }else{
+            while(vehicleIndex == currentCriminal.vehicleIndex){
+                vehicleIndex = random.Next(0, vehicleNames.Length-1);
+            }
+        }
+        return "The suspect was last seen in a " + vehicleNames[vehicleIndex];
     }
 
     private ThiefAI GetCurrentCriminal()

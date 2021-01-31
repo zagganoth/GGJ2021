@@ -13,10 +13,8 @@ public class MapGenerator : MonoBehaviour
 
     [Header("Map Settings")]
     public int gridSize;
-    [SerializeField]
-    int map_width = 97;
-    [SerializeField]
-    int map_height = 65;
+    public int map_width = 17;
+    public int map_height = 11;
     [SerializeField]
     int num_destinations = 6;
     

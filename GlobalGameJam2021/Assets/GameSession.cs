@@ -20,9 +20,8 @@ public class GameSession : MonoBehaviour
     float timeSinceLastHint = 0;
 
     //SPAWN CRIMINAL CODE\
-    [SerializeField] Criminal criminal;
     public ThiefAI currentCriminal;
-    string criminalShirtColour;
+    public ThiefAI currentAccusation;
 
     void Start()
     {
@@ -33,6 +32,21 @@ public class GameSession : MonoBehaviour
     void Update()
     {
         CheckTimeSinceLastHint();
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            // Casts the ray and get the first game object hit
+            Physics.Raycast(ray, out hit);
+            GameObject other = hit.collider.gameObject;
+            if(other.GetComponent<ThiefAI>()){
+                currentAccusation = other.GetComponent<ThiefAI>();
+                if(currentAccusation == currentCriminal){
+                    Debug.Log("you win");
+                }
+            }
+        }
     }
 
     private void CheckTimeSinceLastHint()
