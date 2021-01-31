@@ -16,7 +16,7 @@ public class Criminal : MonoBehaviour
     
     List<string> shirtColours = new List<string>();
     string criminalShirtColour;
-    [SerializeField] Material red;
+    [SerializeField] public Material red;
     [SerializeField] Material blue;
     [SerializeField] Material yellow;
     GameObject child;
