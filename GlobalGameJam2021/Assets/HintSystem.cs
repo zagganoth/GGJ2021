@@ -8,7 +8,7 @@ public class HintSystem : MonoBehaviour
 {
     System.Random random = new System.Random();
     int randomHint;
-    Criminal currentCriminal;
+    ThiefAI currentCriminal;
 
     int hintSlot1;
     int hintSlot2;
@@ -19,6 +19,9 @@ public class HintSystem : MonoBehaviour
     List<string> falseHints = new List<string>();
     string currentTrueHint;
     string currentFalseHint;
+
+    public string[] colorNames;
+    public string[] vehicleNames;
 
     public void SendHint()
     {
@@ -47,7 +50,7 @@ public class HintSystem : MonoBehaviour
         BuildTrueHintsList();
         randomHint = random.Next(0, trueHints.Count);
         currentTrueHint = trueHints[randomHint];
-        print(currentTrueHint);
+        //print(currentTrueHint);
         return currentTrueHint;
     }
 
@@ -56,51 +59,41 @@ public class HintSystem : MonoBehaviour
         BuildFalseHintsList();
         randomHint = random.Next(0, falseHints.Count);
         currentFalseHint = falseHints[randomHint];
-        print(currentFalseHint);
+        //print(currentFalseHint);
         return currentFalseHint;
     }
 
     private void BuildFalseHintsList()
     {
-        falseHints.Add(FalseShirtColour());
+        falseHints.Add(GetColorHint(false));
     }
 
     private void BuildTrueHintsList()
     {
-        trueHints.Add(TrueShirtColour());
+        trueHints.Add(GetColorHint(true));
         trueHints.Add(TrueSighting());
-    }
-
-    private string TrueShirtColour()
-    {
-        GetCurrentCriminal();
-        return "The suspect was last seen wearing a " + currentCriminal.GetShirtColour() + " coloured shirt";
     }
 
     private string TrueSighting()
     {
         GetCurrentCriminal();
-        return "The suspect was last seen at " + currentCriminal.GetCurrentLocation();
+        return "The suspect was last seen at " + currentCriminal.transform.position;
     }
 
-    private string FalseShirtColour()
-    {
+    string GetColorHint(bool truth){
         GetCurrentCriminal();
-        string criminalShirtColour = currentCriminal.GetShirtColour();
-        List<string> shirtColours = currentCriminal.GetAllShirtColours();
-        randomHint = random.Next(0, shirtColours.Count);
-        if (shirtColours[randomHint] != criminalShirtColour)
-        {
-            return "The suspect was last seen wearing a " + shirtColours[randomHint] + " coloured shirt";
+        int colorIndex = 0;
+        if(truth){
+            colorIndex = currentCriminal.colorIndex;
+        }else{
+            while(colorIndex == currentCriminal.colorIndex){
+                colorIndex = random.Next(0, colorNames.Length-1);
+            }
         }
-        else
-        {
-            return FalseShirtColour();
-        }
+        return "The suspect was last seen wearing a " + colorNames[colorIndex] + " coloured shirt";
     }
 
-
-    private Criminal GetCurrentCriminal()
+    private ThiefAI GetCurrentCriminal()
     {
         return currentCriminal = GetComponent<GameSession>().GetCurrentCriminal();
     }

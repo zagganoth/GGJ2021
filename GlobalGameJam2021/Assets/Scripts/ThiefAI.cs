@@ -4,22 +4,29 @@ using UnityEngine;
 
 public class ThiefAI : MonoBehaviour
 {
-    [SerializeField]
-    BaseState startState;
-    private Vector2Int destination;
-    Stack<Vector2Int> positions;
-    Vector3 curStraightDest;
-    [SerializeField]
-    float speed;
+    MapGenerator mapStance;
     HashSet<Vector2Int> visitedLocations;
+    Stack<Vector2Int> currentPath;
+    Vector2Int destination;
+    public Vector3 curStraightDest;
     bool visitedEverything;
     bool pathActive;
-    MapGenerator mapStance;
+
+    [Header("Agent settings")]
+    public bool isThief = false;
+    public int colorIndex = 0;
+    public int vehicleIndex = 0;
+    public BaseState currentState;
+    
+    [SerializeField]
+    BaseState startState;
+    [SerializeField]
+    float speed;
     [SerializeField]
     bool loopAfterVisitingAll;
     [SerializeField]
-    bool noVisit;
-    // Start is called before the first frame update
+    bool onlyVisitDestinationsOnce;
+
     void Start()
     {
         curStraightDest = transform.position;
@@ -34,26 +41,23 @@ public class ThiefAI : MonoBehaviour
         var clone = Instantiate(newState);
         clone.Enter(this);
         StartCoroutine(clone.Perform());
+        currentState = newState;
     }
 
     public void setDestination(Vector2Int dest)
     {
+        pathActive = true;
         destination = dest; 
     }
     public Vector2Int getDestination()
     {
         return destination;
     }
-    public Vector3 getPos()
+    public void visitLocation(Vector2Int location)
     {
-        return transform.position;
-    }
-    public void visitLocation(Vector2Int index)
-    {
-        if (!noVisit)
+        if (onlyVisitDestinationsOnce)
         {
-
-            visitedLocations.Add(index);
+            visitedLocations.Add(location);
         }
     }
     public HashSet<Vector2Int> getVisitedLocations() {
@@ -69,83 +73,60 @@ public class ThiefAI : MonoBehaviour
     }
     public bool hasVisitedEverything()
     {
-        return visitedEverything;
+        return visitedEverything && onlyVisitDestinationsOnce;
     }
     IEnumerator clearVisited()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(0.1f);
         visitedEverything = false;
         visitedLocations = new HashSet<Vector2Int>();
         changeState(startState);
     }
-    private Vector3 getAdjacentRoad(bool[,] roads, Vector3 position)
-    {
-        int nodeX = Mathf.FloorToInt(position.x);
-        int nodeY = Mathf.FloorToInt(position.y);
 
-        if (nodeX - 1 >= 0 && roads[nodeX - 1, nodeY])
-        {
-            return new Vector3(nodeX - 1, transform.position.y, nodeY);
-        }
-        else if (nodeX + 1 < roads.GetLength(0) && roads[nodeX + 1, nodeY])
-        {
-            return new Vector3(nodeX + 1, transform.position.y, nodeY);
-        }
-        else if (nodeY - 1 >= 0 &&  roads[nodeX, nodeY - 1])
-        {
-            return new Vector3(nodeX, transform.position.y, nodeY - 1);
-        }
-        else if(nodeY + 1 < roads.GetLength(1))
-        {
-            return new Vector3(nodeX, transform.position.y, nodeY + 1);
-        }
-        return position;
-    }
-    public void setPositions(Stack<Vector2Int> pos)
+    public void setPathPositions(Stack<Vector2Int> pos)
     {
-        positions = pos;
-        if(positions.Count == 0)
+        currentPath = pos;
+        if(currentPath.Count == 0)
         {
             //Debug.Log("No path found to " + destination);
             return;
         }
-        var tempDest = positions.Pop();
-        curStraightDest = new Vector3(tempDest.x, 0.1f, tempDest.y);
+        var tempDest = currentPath.Pop();
+        curStraightDest = new Vector3(tempDest.x, 0.0f, tempDest.y);
         pathActive = true;
         //Debug.Log("Moving towards: " + curStraightDest);
     }
     private IEnumerator waitThenMove()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(0.1f);
         //Debug.Log("Then moving");
-
         changeState(startState);
-
     }
     // Update is called once per frame
     void Update()
     {
-        if (!visitedEverything &&positions != null)
+        if (!visitedEverything && currentPath != null)
         {
-            if (positions.Count > 0)
+            if (currentPath.Count > 0)
             {
                 if (Vector3.Distance(curStraightDest, transform.position) == 0)
                 {
-                    var tempDest = positions.Pop();
+                    var tempDest = currentPath.Pop();
                     curStraightDest = new Vector3(tempDest.x, 0.1f, tempDest.y);
-                    if(positions.Count == 0)
+                    if(currentPath.Count == 0)
                     {
                         pathActive = false;
                     }
                 }
+                Vector3 newPos = Vector3.MoveTowards(transform.position, curStraightDest, speed * Time.deltaTime);
                 //Debug.Log("Position is " + transform.position);
                 //Debug.Log("Moving to " + curStraightDest);
-
+                if(pathActive){
                     if (curStraightDest.x > transform.position.x) //right
                     {
                         //Debug.Log("Rotating right");
                         //transform.rotation = new Quaternion(transform.rotation.x, 270, transform.rotation.z, transform.rotation.w);
-                        transform.eulerAngles = new Vector3(transform.eulerAngles.x, 270, transform.eulerAngles.z);
+                        transform.eulerAngles = new Vector3(transform.eulerAngles.x, 270 , transform.eulerAngles.z);
                         //Debug.Log(transform.rotation.y);
                     }
                     else if (curStraightDest.x < transform.position.x) // left
@@ -159,23 +140,18 @@ public class ThiefAI : MonoBehaviour
                     {
                         //Debug.Log("Rotating down");
                         //transform.rotation = new Quaternion(transform.rotation.x, 0, transform.rotation.z, transform.rotation.w);
-                        transform.eulerAngles = new Vector3(transform.eulerAngles.x, 0, transform.eulerAngles.z);
+                        transform.eulerAngles = new Vector3(transform.eulerAngles.x,  0, transform.eulerAngles.z);
                     }
-                    else if (curStraightDest.z > transform.position.z) // up 
+                    else if(curStraightDest.z > transform.position.z) // up 
                     {
                         //Debug.Log("Rotating up");
                         transform.eulerAngles = new Vector3(transform.eulerAngles.x, 180, transform.eulerAngles.z);
                         //transform.rotation = new Quaternion(transform.rotation.x, 180, transform.rotation.z, transform.rotation.w);
                     }
-                
+                }
 
-                transform.position = Vector3.MoveTowards(transform.position, curStraightDest, speed * Time.deltaTime); ;
-                /*int testX = Mathf.FloorToInt(transform.position.x);
-                int testY = Mathf.FloorToInt(transform.position.z);
-                if(!mapStance.roads[testX,testY])
-                {
-                    transform.position = getAdjacentRoad(mapStance.roads, transform.position);
-                }*/
+
+                transform.position = newPos;
             }
             else if(!pathActive)
             {

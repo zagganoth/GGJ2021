@@ -21,13 +21,12 @@ public class GameSession : MonoBehaviour
 
     //SPAWN CRIMINAL CODE\
     [SerializeField] Criminal criminal;
-    Criminal currentCriminal;
+    public ThiefAI currentCriminal;
     string criminalShirtColour;
 
     void Start()
     {
         BeginTimer();
-        SpawnCriminal();
         hintSystem = FindObjectOfType<HintSystem>();
     }
 
@@ -47,14 +46,9 @@ public class GameSession : MonoBehaviour
         else { return; }
     }
 
-    public Criminal GetCurrentCriminal()
+    public ThiefAI GetCurrentCriminal()
     {
         return currentCriminal;
-    }
-
-    private void SpawnCriminal()
-    {
-        currentCriminal = Instantiate(criminal, transform.position, Quaternion.identity) as Criminal;
     }
 
 
