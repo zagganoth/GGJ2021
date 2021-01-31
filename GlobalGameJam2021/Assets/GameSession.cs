@@ -39,12 +39,13 @@ public class GameSession : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             // Casts the ray and get the first game object hit
-            Physics.Raycast(ray, out hit);
-            GameObject other = hit.collider.gameObject;
-            if(other.GetComponent<ThiefAI>()){
-                currentAccusation = other.GetComponent<ThiefAI>();
-                detailsPanel.enabled = true;
-                detailsPanel.GetComponent<DetailsPanel>().UpdatePanelText(currentAccusation.colorIndex, currentAccusation.vehicleIndex);
+            if (Physics.Raycast(ray, out hit)){
+                GameObject other = hit.collider.gameObject;
+                if(other.GetComponent<ThiefAI>()){
+                    currentAccusation = other.GetComponent<ThiefAI>();
+                    detailsPanel.enabled = true;
+                    detailsPanel.GetComponent<DetailsPanel>().UpdatePanelText(currentAccusation.colorIndex, currentAccusation.vehicleIndex);
+                }
             }
         }
     }

@@ -293,7 +293,6 @@ Light:
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
-  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!4 &705507995
@@ -454,7 +453,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5.4
+  orthographic size: 6.44
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -477,13 +476,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.60222703, y: -0.20907812, z: -0.16487545, w: 0.7526122}
-  m_LocalPosition: {x: 14.46, y: 11, z: 2.07}
+  m_LocalRotation: {x: 0.5686694, y: -0.10692085, z: 0.07486677, w: 0.81214416}
+  m_LocalPosition: {x: 8.22, y: 6.77, z: 2.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1912561559}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 123.118, y: -249.961, z: 113.776}
+  m_LocalEulerAnglesHint: {x: 70, y: -15, z: 0}
 --- !u!114 &978110356 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1103960709728278180, guid: 79083bd6aa10a324f841f664fe6a41f2,
@@ -515,6 +514,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 689632156, guid: 79083bd6aa10a324f841f664fe6a41f2, type: 3}
+      propertyPath: streetLabel
+      value: 
+      objectReference: {fileID: 5092255240956584551, guid: 235ae996da110de409c677b5d23c1fd2,
+        type: 3}
     - target: {fileID: 689632156, guid: 79083bd6aa10a324f841f664fe6a41f2, type: 3}
       propertyPath: hintNumberOne
       value: 
@@ -571,6 +575,11 @@ PrefabInstance:
       propertyPath: vehicleNames.Array.data[4]
       value: bus
       objectReference: {fileID: 0}
+    - target: {fileID: 1103960709728278180, guid: 79083bd6aa10a324f841f664fe6a41f2,
+        type: 3}
+      propertyPath: detailsPanel
+      value: 
+      objectReference: {fileID: 1369273813}
     - target: {fileID: 5647785735439404730, guid: 79083bd6aa10a324f841f664fe6a41f2,
         type: 3}
       propertyPath: m_Name
@@ -856,7 +865,6 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
 --- !u!223 &1369273813
 Canvas:
   m_ObjectHideFlags: 0
@@ -1129,7 +1137,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -1284,7 +1291,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
-    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -1410,7 +1416,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1912561559}
-  - component: {fileID: 1912561560}
   m_Layer: 0
   m_Name: Scene
   m_TagString: Untagged
@@ -1434,19 +1439,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1912561560
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1912561558}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99dc2c07c044c5a43a68fdaf24732a00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  detailsPanel: {fileID: 1369273813}
 --- !u!1 &2049189592
 GameObject:
   m_ObjectHideFlags: 0
