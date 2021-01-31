@@ -22,9 +22,13 @@ public class GameSession : MonoBehaviour
     //SPAWN CRIMINAL CODE\
     public ThiefAI currentCriminal;
     public ThiefAI currentAccusation;
+    [SerializeField]
+    float reportCooldown;
+    bool reportCooldownActive;
 
     void Start()
     {
+        reportCooldownActive = false;
         detailsPanel.enabled = false;
         BeginTimer();
         hintSystem = FindObjectOfType<HintSystem>();
@@ -66,7 +70,30 @@ public class GameSession : MonoBehaviour
         return currentCriminal;
     }
 
+    public void Report()
+    {
+        if (!reportCooldownActive) {
+            if (currentAccusation == currentCriminal)
+            {
+                Debug.Log("You did it!");
+            }
+            else
+            {
+                StartCoroutine(ReportCooldown());
+            }
+        }
+        else
+        {
+            Debug.Log("Cannot dispatch police. Please wait a few seconds");
+        }
+    }
+    private IEnumerator ReportCooldown()
+    {
+        reportCooldownActive = true;
+        yield return new WaitForSeconds(reportCooldown);
+        reportCooldownActive = false;
 
+    }
     private IEnumerator StartGameTimer()
     {
         while (gameStarted)
