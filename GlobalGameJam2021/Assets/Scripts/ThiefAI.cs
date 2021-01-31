@@ -8,6 +8,7 @@ public class ThiefAI : MonoBehaviour
     HashSet<Vector2Int> visitedLocations;
     Stack<Vector2Int> currentPath;
     Vector2Int destination;
+    GameObject destinationBuilding;
     public Vector3 curStraightDest;
     [SerializeField]
     bool visitedEverything;
@@ -48,10 +49,11 @@ public class ThiefAI : MonoBehaviour
         currentState = newState;
     }
 
-    public void setDestination(Vector2Int dest)
+    public void setDestination(Vector2Int dest, GameObject building)
     {
         pathActive = true;
-        destination = dest; 
+        destination = dest;
+        destinationBuilding = building;
     }
     public Vector2Int getDestination()
     {
@@ -103,7 +105,20 @@ public class ThiefAI : MonoBehaviour
     {
 
         state = startState;
-        yield return new WaitForSeconds(0.1f);
+        Renderer childRenderer;
+        if (isThief)
+        {
+            childRenderer = destinationBuilding.transform.GetChild(0).GetComponent<Renderer>();
+            Material cur = childRenderer.material;
+            childRenderer.material = mapStance.red;
+            yield return new WaitForSeconds(5f);
+
+            childRenderer.material = cur;
+        }
+        else
+        {
+            yield return new WaitForSeconds(5f);
+        }
         //Debug.Log("Then moving");
         changeState(startState);
     }
