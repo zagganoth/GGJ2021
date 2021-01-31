@@ -96,8 +96,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 3745238535534220073}
   offset: {x: 0, y: 0, z: 0}
-  followSpeed: 5
-  rotationFollowSpeed: 5
+  followSpeed: 4
+  rotationFollowSpeed: 1
   matchRotation: 1
 --- !u!1 &3745238534458868090
 GameObject:

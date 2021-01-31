@@ -1376,8 +1376,8 @@ MonoBehaviour:
     type: 3}
   lastDestination: 
   normieCount: 0
-  targetNormieCount: 40
-  maxNormieCount: 60
+  targetNormieCount: 1000
+  maxNormieCount: 1000
   bannerText: {fileID: 1173360922}
 --- !u!1 &1768494030
 GameObject:

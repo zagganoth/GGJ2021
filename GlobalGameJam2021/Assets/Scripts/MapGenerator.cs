@@ -10,6 +10,7 @@ public class MapGenerator : MonoBehaviour
     public Dictionary<Vector2Int, GameObject> normalBuildings;
     public static MapGenerator instance;
     public GameSession gameSession;
+    public List<GameObject> thieves;
 
     int placedDestinations = 0;
 
@@ -78,8 +79,8 @@ public class MapGenerator : MonoBehaviour
 
 
                     if (normieCount<maxNormieCount && (Random.Range(0.0f, 1.0f) >= normieCount/targetNormieCount) && Vector3.Distance(new Vector3(i,0,j),lastSpawnLoc) > 2.5f){
-                        normieCount++;
                         int random = Random.Range(0, normiePrefabs.Count);
+                        normieCount++;
                         int randomColor = Random.Range(0, possibleCarTextures.Count);
                         lastSpawnLoc = new Vector3(i, 0, j);
                         var obj = Instantiate(normiePrefabs[random], lastSpawnLoc, Quaternion.identity);
@@ -88,11 +89,24 @@ public class MapGenerator : MonoBehaviour
                         obj.GetComponentInChildren<ThiefAI>().vehicleIndex = random;
                         obj.GetComponentInChildren<ThiefAI>().speed *= Random.Range(0.8f, 1.2f);
                         obj.transform.SetParent(trafficParent);
-                        if(!placedCriminal && random != 2){
+                        if(!placedCriminal && random != 1){
                             obj.GetComponentInChildren<ThiefAI>().isThief = true;
                             placedCriminal = true;
                             obj.transform.localScale = new Vector3(1, 1, 1);
                             gameSession.currentCriminal = obj.GetComponentInChildren<ThiefAI>();
+                            thieves.Add(obj.gameObject);
+                        }
+                        if(random == 1){
+                            for(int a = 0; a < 5; a++){
+                                randomColor = Random.Range(0, possibleCarTextures.Count);
+                                lastSpawnLoc = new Vector3(i, 0, j);
+                                var obj2 = Instantiate(normiePrefabs[random], lastSpawnLoc, Quaternion.identity);
+                                obj2.GetComponentInChildren<MeshRenderer>().material.SetTexture("_MainTex",possibleCarTextures[randomColor]);
+                                obj2.GetComponentInChildren<ThiefAI>().colorIndex = randomColor;
+                                obj2.GetComponentInChildren<ThiefAI>().vehicleIndex = random;
+                                obj2.GetComponentInChildren<ThiefAI>().speed *= Random.Range(0.8f, 1.2f);
+                                obj2.transform.SetParent(trafficParent);
+                            }
                         }
                     }
                 }
