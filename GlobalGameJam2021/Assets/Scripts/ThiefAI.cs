@@ -111,6 +111,7 @@ public class ThiefAI : MonoBehaviour
             childRenderer = destinationBuilding.transform.GetChild(0).GetComponent<Renderer>();
             Material cur = childRenderer.material;
             childRenderer.material = mapStance.red;
+            Instantiate(mapStance.newsFlare, Vector3.zero, Quaternion.identity);
             yield return new WaitForSeconds(5f);
 
             childRenderer.material = cur;

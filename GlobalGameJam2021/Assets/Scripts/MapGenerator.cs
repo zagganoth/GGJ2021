@@ -35,6 +35,7 @@ public class MapGenerator : MonoBehaviour
     [Header("Possible Textures")]
     public List<Texture2D> possibleCarTextures;
     public Material red;
+    public GameObject newsFlare;
 
     public int normieCount = 0;
     public int targetNormieCount = 60;
