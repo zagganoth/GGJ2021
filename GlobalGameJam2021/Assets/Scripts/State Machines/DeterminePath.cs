@@ -91,7 +91,7 @@ public class DeterminePath : BaseState
         yield return null;
         parentDict = new Dictionary<Vector2Int, Vector2Int>();
         Vector2Int dest = self.getDestination();
-
+        Vector2Int origDest = dest;
         Vector3 pos = self.getPos();
         bool[,] roads = mapStance.roads;
         dest = getAdjacentRoad(roads, dest);
@@ -182,6 +182,7 @@ public class DeterminePath : BaseState
         nodes.Clear();
         //Debug.Log("Loop exited");
         Stack<Vector2Int> path = new Stack<Vector2Int>();
+        path.Push(origDest);
         while(parentDict.ContainsKey(finalPos))
         {
             if(!roads[finalPos.x,finalPos.y])

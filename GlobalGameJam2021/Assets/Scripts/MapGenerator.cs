@@ -46,6 +46,7 @@ public class MapGenerator : MonoBehaviour
                 if(i%gridSize == 0 || j%gridSize == 0)
                 {
                     Instantiate(roadPrefab, new Vector3(i, 0.1f, j), Quaternion.identity);
+
                     roads[i, j] = true;
                 }
                 
