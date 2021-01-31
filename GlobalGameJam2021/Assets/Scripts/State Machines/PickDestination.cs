@@ -10,36 +10,35 @@ public class PickDestination : BaseState
     protected override void childEnter(ThiefAI cur)
     {
         mapStance = MapGenerator.instance;
-        Debug.Log(mapStance);
     }
 
     public override IEnumerator Perform()
     {
         yield return null;
-        int attempts =0;
-        int locInt = Random.Range(0, mapStance.destinationLocations.Count);
-        HashSet<int> visited = self.getVisitedLocations();
+
+        HashSet<Vector2Int> visited = self.getVisitedLocations();
+
         if(visited.Count == mapStance.destinationLocations.Count)
         {
             self.setVisitedEverything();
             Exit();
         }
-        while(visited.Contains(locInt))
+        List<Vector2Int> visitable = new List<Vector2Int>();
+        foreach (var dest in mapStance.destinationLocations)
         {
-            locInt = Random.Range(0, mapStance.destinationLocations.Count);
-            attempts++;
-            if(attempts > mapStance.destinationLocations.Count * 2)
+            if (!visited.Contains(dest))
             {
-                self.setVisitedEverything();
-                Exit();
+                visitable.Add(dest);
             }
-        } 
+        }
+        int locInt = Random.Range(0, visitable.Count);
         int curIndex = 0;
-        foreach(var loc in mapStance.destinationLocations)
+        foreach(var loc in visitable)
         {
             if (curIndex == locInt)
             {
                 self.setDestination(loc);
+                self.visitLocation(loc);
                 break;
             }
             curIndex++;

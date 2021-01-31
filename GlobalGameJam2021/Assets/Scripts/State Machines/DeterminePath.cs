@@ -96,8 +96,8 @@ public class DeterminePath : BaseState
         bool[,] roads = mapStance.roads;
         dest = getAdjacentRoad(roads, dest);
         Vector2Int convertedPos = new Vector2Int(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.z));
-        Debug.Log("Current position is " + convertedPos);
-        Debug.Log("Destination is " + dest);
+        //Debug.Log("Current position of " + self + " is " + convertedPos);
+        //Debug.Log("Destination is " + dest);
         //Tuple<Vector2Int, Vector2Int> node;
         PriorityQueue<HeapNode> nodes = new PriorityQueue<HeapNode>(1000);
         nodes.Insert(1, new HeapNode(0, convertedPos,dest));
@@ -119,7 +119,7 @@ public class DeterminePath : BaseState
                 break;
             }
             Vector2Int left = new Vector2Int(nodeX - 1, nodeY);
-            if (node.f > 16)
+            if (node.f > 8)
             {
                 while (left.x >= 0 && !isIntersection(roads, left))
                 {
@@ -127,7 +127,7 @@ public class DeterminePath : BaseState
                 }
             }
             Vector2Int right = new Vector2Int(nodeX + 1, nodeY);
-            if (node.f > 16)
+            if (node.f > 8)
             {
                 while (right.x < roads.GetLength(0) && !isIntersection(roads, right))
                 {
@@ -135,7 +135,7 @@ public class DeterminePath : BaseState
                 }
             }
             Vector2Int up = new Vector2Int(nodeX, nodeY + 1);
-            if (node.f > 16)
+            if (node.f > 8)
             {
                 while (up.y < roads.GetLength(1) && !isIntersection(roads, up))
                 {
@@ -144,7 +144,7 @@ public class DeterminePath : BaseState
 
             }
             Vector2Int down = new Vector2Int(nodeX, nodeY - 1);
-            if (node.f > 16)
+            if (node.f >8)
             {
                 while (down.y >= 0 && !isIntersection(roads, down))
                 {
@@ -152,26 +152,26 @@ public class DeterminePath : BaseState
                 }
             }
             //left
-            if (nodeX - 1 >= 0 && !parentDict.ContainsKey(left))
+            if (nodeX - 1 >= 0 && roads[nodeX-1,nodeY] && !parentDict.ContainsKey(left))
             {
                 //Debug.Log("Left is valid");
                 nodes.Insert(index++, new HeapNode(node.pathCost + 1, left, dest));
                 parentDict.Add(left, node.position);
             }
             //right
-            if(nodeX + 1 < roads.GetLength(0) && !parentDict.ContainsKey(right))
+            if(nodeX + 1 < roads.GetLength(0) && roads[nodeX + 1, nodeY] && !parentDict.ContainsKey(right))
             {
                 //Debug.Log("right is valid");
                 nodes.Insert(index++, new HeapNode(node.pathCost + 1, right, dest));
                 parentDict.Add(right, node.position);
             }//up
-            if (nodeY + 1 < roads.GetLength(1) && !parentDict.ContainsKey(up))
+            if (nodeY + 1 < roads.GetLength(1) && roads[nodeX,nodeY+1] && !parentDict.ContainsKey(up))
             {
                 //Debug.Log("Up is valid");
                 nodes.Insert(index++, new HeapNode(node.pathCost + 1, up, dest));
                 parentDict.Add(up, node.position);
             }//down
-            if (nodeY - 1 >= 0 && !parentDict.ContainsKey(down))
+            if (nodeY - 1 >= 0 && roads[nodeX,nodeY-1] && !parentDict.ContainsKey(down))
             {
                 //Debug.Log("down is valid");
                 nodes.Insert(index++, new HeapNode(node.pathCost + 1, down, dest));
@@ -180,10 +180,14 @@ public class DeterminePath : BaseState
             index += 1;
         }
         nodes.Clear();
-        Debug.Log("Loop exited");
+        //Debug.Log("Loop exited");
         Stack<Vector2Int> path = new Stack<Vector2Int>();
         while(parentDict.ContainsKey(finalPos))
         {
+            if(!roads[finalPos.x,finalPos.y])
+            {
+                Debug.LogError("HOW ?");
+            }
             path.Push(finalPos);
             var temp = finalPos;
             finalPos = parentDict[finalPos];

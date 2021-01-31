@@ -17,6 +17,12 @@ public class MapGenerator : MonoBehaviour
     GameObject destinationPrefab;
     public HashSet<Vector2Int> destinationLocations;
     public static MapGenerator instance;
+    [SerializeField]
+    GameObject normiePrefab;
+    [SerializeField]
+    GameObject buildingPrefab;
+    [SerializeField]
+    public int gridSize;
     private void Awake()
     {
         if(instance && instance != this)
@@ -35,7 +41,7 @@ public class MapGenerator : MonoBehaviour
         {
             for(int j = 0; j < map_height; j++)
             {
-                if(i%16 == 0 || j%16 == 0)
+                if(i%gridSize == 0 || j%gridSize == 0)
                 {
                     Instantiate(roadPrefab, new Vector3(i, 0.1f, j), Quaternion.identity);
                     roads[i, j] = true;
@@ -60,8 +66,29 @@ public class MapGenerator : MonoBehaviour
                 }
             }
         }
+        for (int i = 0; i < map_width; i++)
+        {
+            for (int j = 0; j < map_height; j++)
+            {
+                
+                if (!roads[i,j] && !destinationLocations.Contains(new Vector2Int(i, j))) { 
+                    Instantiate(buildingPrefab, new Vector3(i, 0.1f, j), Quaternion.identity);
+                }
+
+            }
+        }
+        StartCoroutine(spawnNormie());
     }
 
+    IEnumerator spawnNormie()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(5f);
+            Instantiate(normiePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        }
+        //yield return null;
+    }
     // Update is called once per frame
     void Update()
     {
