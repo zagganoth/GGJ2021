@@ -78,7 +78,7 @@ public class MapGenerator : MonoBehaviour
                         if(!placedCriminal){
                             obj.GetComponent<ThiefAI>().isThief = true;
                             placedCriminal = true;
-                            obj.transform.localScale = new Vector3(1, 10, 1);
+                            obj.transform.localScale = new Vector3(1, 1, 1);
                             gameSession.currentCriminal = obj.GetComponent<ThiefAI>();
                         }
                     }

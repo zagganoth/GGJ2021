@@ -293,7 +293,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5.4
+  orthographic size: 6.71
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -316,13 +316,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.60222703, y: -0.20907812, z: -0.16487545, w: 0.7526122}
-  m_LocalPosition: {x: 14.46, y: 11, z: 2.07}
+  m_LocalRotation: {x: 0.5739901, y: -0.11689231, z: 0.08322464, w: 0.8061918}
+  m_LocalPosition: {x: 8.54, y: 7.68, z: 2.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1912561559}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 123.118, y: -249.961, z: 113.776}
+  m_LocalEulerAnglesHint: {x: 70.9, y: -16.5, z: 0}
 --- !u!114 &978110356 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1103960709728278180, guid: 79083bd6aa10a324f841f664fe6a41f2,
@@ -342,6 +342,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 689632156, guid: 79083bd6aa10a324f841f664fe6a41f2, type: 3}
+      propertyPath: streetLabel
+      value: 
+      objectReference: {fileID: 5092255240956584551, guid: 235ae996da110de409c677b5d23c1fd2,
+        type: 3}
     - target: {fileID: 689632156, guid: 79083bd6aa10a324f841f664fe6a41f2, type: 3}
       propertyPath: hintNumberOne
       value: 
@@ -792,8 +797,8 @@ MonoBehaviour:
   - {fileID: 2800000, guid: eb43cbc5d630505478ac481db78e83b3, type: 3}
   - {fileID: 2800000, guid: 8f2a196c23a01bc4a9f093eda413f094, type: 3}
   normieCount: 0
-  targetNormieCount: 60
-  maxNormieCount: 60
+  targetNormieCount: 30
+  maxNormieCount: 100
 --- !u!1 &1822275664
 GameObject:
   m_ObjectHideFlags: 0

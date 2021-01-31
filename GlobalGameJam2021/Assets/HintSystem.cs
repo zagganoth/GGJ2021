@@ -23,11 +23,42 @@ public class HintSystem : MonoBehaviour
 
     public string[] colorNames;
     public string[] vehicleNames;
-    public string[] horzStreetNames;
-    public string[] vertStreetNames;
+    public string[] horzStreetNames = {"1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th", "13th"};
+    public string[] vertStreetNames = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"};
+    public GameObject streetLabel;
+
+    List<GameObject> horzStreets = new List<GameObject>();
+    List<GameObject> vertStreets = new List<GameObject>();
 
     private void Start() {
         mapInstance = MapGenerator.instance;
+        CreateStreetLabels();
+    }
+
+    void CreateStreetLabels(){
+        int spacing = mapInstance.gridSize;
+        int currentPos = 0;
+        while(currentPos < mapInstance.map_height){
+            var lbl = Instantiate(streetLabel, new Vector3(mapInstance.map_width/2,0.15f,currentPos),Quaternion.identity) as GameObject;
+            lbl.transform.eulerAngles = new Vector3(90, 0, 0);
+            horzStreets.Add(lbl);
+            currentPos += spacing;
+        }
+
+        currentPos = 0;
+        while(currentPos < mapInstance.map_width){
+            var lbl = Instantiate(streetLabel, new Vector3(currentPos,0.15f,mapInstance.map_height/2),Quaternion.identity) as GameObject;
+            lbl.transform.eulerAngles = new Vector3(90, -90, 0);
+            vertStreets.Add(lbl);
+            currentPos += spacing;
+        }
+
+        for(int i = 0; i < horzStreets.Count; i++){
+            horzStreets[i].GetComponentInChildren<TMP_Text>().text = horzStreetNames[i];
+        }
+        for(int i = 0; i < vertStreets.Count; i++){
+            vertStreets[i].GetComponentInChildren<TMP_Text>().text = vertStreetNames[i];
+        }
     }
 
     public void SendHint()
@@ -36,12 +67,12 @@ public class HintSystem : MonoBehaviour
         if (hintSlot1 == 0)
         {
             hintNumberOne.text = GetTrueHint();
-            hintNumberTwo.text = GetTrueHint();//GetFalseHint();
+            hintNumberTwo.text = GetFalseHint();
         }
         else if (hintSlot1 == 1)
         {
             hintNumberOne.text = GetFalseHint();
-            hintNumberTwo.text = GetTrueHint();//GetTrueHint();
+            hintNumberTwo.text = GetTrueHint();
         }
     }
 
@@ -93,8 +124,9 @@ public class HintSystem : MonoBehaviour
         }else{
             pos = new Vector3 (random.Next(0, mapInstance.map_width), 0, random.Next(0, mapInstance.map_height));
         }
-        pos = pos/mapInstance.gridSize;
-        return "The suspect was last seen at the crossing of " + horzStreetNames[(int)pos.z] + " and " + vertStreetNames[(int)pos.x];
+        int x = Mathf.FloorToInt(pos.x/3);
+        int y = Mathf.FloorToInt(pos.z/3);
+        return "The suspect was last seen at the crossing of " + horzStreetNames[y] + " and " + vertStreetNames[x];
     }
 
     string GetColorHint(bool truth){
@@ -107,7 +139,12 @@ public class HintSystem : MonoBehaviour
                 colorIndex = random.Next(0, colorNames.Length-1);
             }
         }
-        return "The suspect was last seen in a " + colorNames[colorIndex] + " coloured vehicle";
+        if(vehicleNames[currentCriminal.vehicleIndex].Equals("person")){
+            return "The suspect was last seen in " + colorNames[colorIndex] + " coloured clothing";
+        }else{
+            return "The suspect was last seen in a " + colorNames[colorIndex] + " coloured vehicle";
+        }
+        
     }
 
     string GetVehicleHint(bool truth){
@@ -120,7 +157,12 @@ public class HintSystem : MonoBehaviour
                 vehicleIndex = random.Next(0, vehicleNames.Length-1);
             }
         }
-        return "The suspect was last seen in a " + vehicleNames[vehicleIndex];
+        
+        if(vehicleNames[vehicleIndex].Equals("person")){
+            return "The suspect was last seen walking outside a vehicle";
+        }else{
+            return "The suspect was last seen in a " + vehicleNames[vehicleIndex];
+        }
     }
 
     private ThiefAI GetCurrentCriminal()

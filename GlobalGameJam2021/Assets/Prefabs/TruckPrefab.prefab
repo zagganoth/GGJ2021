@@ -127,13 +127,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curStraightDest: {x: 0, y: 0, z: 0}
+  visitedEverything: 0
+  pathActive: 0
   isThief: 0
   colorIndex: 0
   vehicleIndex: 0
+  currentState: {fileID: 0}
   startState: {fileID: 11400000, guid: 3c2faf7d0b090aa40a25792cdcc3cb32, type: 2}
-  speed: 3
+  speed: 0.8
   loopAfterVisitingAll: 1
   onlyVisitDestinationsOnce: 1
+  state: {fileID: 0}
 --- !u!65 &7380950687492217929
 BoxCollider:
   m_ObjectHideFlags: 0
