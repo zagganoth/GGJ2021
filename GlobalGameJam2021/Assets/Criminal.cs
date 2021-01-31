@@ -19,11 +19,14 @@ public class Criminal : MonoBehaviour
     [SerializeField] Material red;
     [SerializeField] Material blue;
     [SerializeField] Material yellow;
-
+    GameObject child;
+    Renderer renderer;
     Vector3 currentLocation = new Vector3();
 
     void Start()
     {
+        child = transform.GetChild(0).gameObject;
+        renderer = child.GetComponent<Renderer>();
         criminalShirtColour = SetShirtColour();
         SetMaterial();
     }
@@ -33,15 +36,15 @@ public class Criminal : MonoBehaviour
     {
         if (criminalShirtColour == "Red")
         {
-            GetComponent<Renderer>().material = red;
+            renderer.material = red;
         }
         else if (criminalShirtColour == "Blue")
         {
-            GetComponent<Renderer>().material = blue;
+            renderer.material = blue;
         }
         else if (criminalShirtColour == "Yellow")
         {
-            GetComponent<Renderer>().material = yellow;
+            renderer.material = yellow;
         }
     }
 

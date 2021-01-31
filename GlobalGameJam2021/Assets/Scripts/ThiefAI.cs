@@ -9,7 +9,9 @@ public class ThiefAI : MonoBehaviour
     Stack<Vector2Int> currentPath;
     Vector2Int destination;
     public Vector3 curStraightDest;
+    [SerializeField]
     bool visitedEverything;
+    [SerializeField]
     bool pathActive;
 
     [Header("Agent settings")]
@@ -26,7 +28,8 @@ public class ThiefAI : MonoBehaviour
     bool loopAfterVisitingAll;
     [SerializeField]
     bool onlyVisitDestinationsOnce;
-
+    [SerializeField]
+    BaseState state;
     void Start()
     {
         curStraightDest = transform.position;
@@ -39,6 +42,7 @@ public class ThiefAI : MonoBehaviour
     public void changeState(BaseState newState)
     {
         var clone = Instantiate(newState);
+        state = clone;
         clone.Enter(this);
         StartCoroutine(clone.Perform());
         currentState = newState;
@@ -77,7 +81,7 @@ public class ThiefAI : MonoBehaviour
     }
     IEnumerator clearVisited()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(5f);
         visitedEverything = false;
         visitedLocations = new HashSet<Vector2Int>();
         changeState(startState);
@@ -88,16 +92,17 @@ public class ThiefAI : MonoBehaviour
         currentPath = pos;
         if(currentPath.Count == 0)
         {
-            //Debug.Log("No path found to " + destination);
+            pathActive = false;
             return;
         }
         var tempDest = currentPath.Pop();
-        curStraightDest = new Vector3(tempDest.x, 0.0f, tempDest.y);
-        pathActive = true;
+        curStraightDest = new Vector3(tempDest.x, 0.1f, tempDest.y);
         //Debug.Log("Moving towards: " + curStraightDest);
     }
     private IEnumerator waitThenMove()
     {
+
+        state = startState;
         yield return new WaitForSeconds(0.1f);
         //Debug.Log("Then moving");
         changeState(startState);

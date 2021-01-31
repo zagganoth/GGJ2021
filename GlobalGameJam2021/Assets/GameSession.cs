@@ -98,4 +98,9 @@ public class GameSession : MonoBehaviour
         print("the game is over");
     }
 
+    public float GetDuaration()
+    {
+        return gameLength;
+    }
+
 }

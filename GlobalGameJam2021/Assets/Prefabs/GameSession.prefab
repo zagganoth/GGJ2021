@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameLength: 15
   hintInterval: 5
-  criminal: {fileID: -8290473095202016171, guid: 8f7cd4817ae99fe4caf4637af82166c8,
+  criminal: {fileID: -2995148090653672066, guid: 9d8b01fc93ac7e24da384c9dc1654b67,
     type: 3}
 --- !u!114 &689632156
 MonoBehaviour:
