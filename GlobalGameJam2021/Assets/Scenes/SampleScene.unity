@@ -1344,11 +1344,11 @@ MonoBehaviour:
   map_height: 10
   num_destinations: 6
   normiePrefabs:
-  - {fileID: 8023968293035196990, guid: a49e9c6598863454f907853417f60bc7, type: 3}
-  - {fileID: 8023968293035196990, guid: 176ac372b84af1c4ebd0700d79ca0fd4, type: 3}
-  - {fileID: 8023968293035196990, guid: aae34503fff4e5841938b92133a04f29, type: 3}
-  - {fileID: 8023968293035196990, guid: b844b89d17eee48459c107908bcf3e0c, type: 3}
-  - {fileID: 8023968293035196990, guid: 26fa978d5059d6141aebd2e4c7bfbbd7, type: 3}
+  - {fileID: 1568024278628067345, guid: a49e9c6598863454f907853417f60bc7, type: 3}
+  - {fileID: 4215084277379704242, guid: 57f1d89c583a2544dacf50cbbcb346ac, type: 3}
+  - {fileID: 1914181678406178493, guid: aae34503fff4e5841938b92133a04f29, type: 3}
+  - {fileID: 7654428096721129435, guid: b844b89d17eee48459c107908bcf3e0c, type: 3}
+  - {fileID: 2429109319672122750, guid: 26fa978d5059d6141aebd2e4c7bfbbd7, type: 3}
   destinationPrefabs:
   - {fileID: 6355916258855247167, guid: 3fc8d99e4bdcdc044b7e9353ed3fd047, type: 3}
   - {fileID: 7417641279607819794, guid: 44c39dfecf8e5d845b955d2e3f6cf7ee, type: 3}

@@ -81,15 +81,15 @@ public class MapGenerator : MonoBehaviour
                         int randomColor = Random.Range(0, possibleCarTextures.Count);
                         var obj = Instantiate(normiePrefabs[random], new Vector3(i, 0, j), Quaternion.identity);
                         obj.GetComponentInChildren<MeshRenderer>().material.SetTexture("_MainTex",possibleCarTextures[randomColor]);
-                        obj.GetComponent<ThiefAI>().colorIndex = randomColor;
-                        obj.GetComponent<ThiefAI>().vehicleIndex = random;
-                        obj.GetComponent<ThiefAI>().speed *= Random.Range(0.8f, 1.2f);
+                        obj.GetComponentInChildren<ThiefAI>().colorIndex = randomColor;
+                        obj.GetComponentInChildren<ThiefAI>().vehicleIndex = random;
+                        obj.GetComponentInChildren<ThiefAI>().speed *= Random.Range(0.8f, 1.2f);
                         obj.transform.SetParent(trafficParent);
                         if(!placedCriminal && random != 2){
-                            obj.GetComponent<ThiefAI>().isThief = true;
+                            obj.GetComponentInChildren<ThiefAI>().isThief = true;
                             placedCriminal = true;
                             obj.transform.localScale = new Vector3(1, 1, 1);
-                            gameSession.currentCriminal = obj.GetComponent<ThiefAI>();
+                            gameSession.currentCriminal = obj.GetComponentInChildren<ThiefAI>();
                         }
                     }
                 }
