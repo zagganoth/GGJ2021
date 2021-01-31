@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class GameSession : MonoBehaviour
 {
     HintSystem hintSystem;
-
+    [SerializeField] Canvas detailsPanel;
     //TIMER CODE
     private TimeSpan gameTime;
     private TimeSpan gameDuration;
@@ -20,12 +20,12 @@ public class GameSession : MonoBehaviour
     float timeSinceLastHint = 0;
 
     //SPAWN CRIMINAL CODE\
-    [SerializeField] Criminal criminal;
     public ThiefAI currentCriminal;
-    string criminalShirtColour;
+    public ThiefAI currentAccusation;
 
     void Start()
     {
+        detailsPanel.enabled = false;
         BeginTimer();
         hintSystem = FindObjectOfType<HintSystem>();
     }
@@ -33,6 +33,20 @@ public class GameSession : MonoBehaviour
     void Update()
     {
         CheckTimeSinceLastHint();
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            // Casts the ray and get the first game object hit
+            Physics.Raycast(ray, out hit);
+            GameObject other = hit.collider.gameObject;
+            if(other.GetComponent<ThiefAI>()){
+                currentAccusation = other.GetComponent<ThiefAI>();
+                detailsPanel.enabled = true;
+                detailsPanel.GetComponent<DetailsPanel>().UpdatePanelText(currentAccusation.colorIndex, currentAccusation.vehicleIndex);
+            }
+        }
     }
 
     private void CheckTimeSinceLastHint()

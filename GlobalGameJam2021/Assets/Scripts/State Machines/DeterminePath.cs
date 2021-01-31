@@ -98,27 +98,24 @@ public class DeterminePath : BaseState
         bool[,] roads = mapStance.roads;
         if (roads.Length == 0)
         {
+            Debug.LogError("Roads not provided!");
             Exit();
         }
         dest = getAdjacentRoad(roads, dest);
         Vector2Int convertedPos = new Vector2Int(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.z));
+        Stack<Vector2Int> path = new Stack<Vector2Int>();
         PriorityQueue<HeapNode> nodes = new PriorityQueue<HeapNode>(1000);
         nodes.Insert(1, new HeapNode(0, convertedPos,dest));
         Vector2Int finalPos = dest;
         int index = 0;
         while(nodes.Count > 0)
         {
-            // if(index > 5000)
-            // {
-            //     Debug.Log("Too many iterations needed to determine pathing for this AI. There is probably a bug causing this");
-            //     break;
-            // }
             var node = nodes.Pop();
             int nodeX = node.position.x;
             int nodeY = node.position.y;
             if(node.position == dest)
             {
-                finalPos = node.position;
+                //finalPos = node.position;
                 break;
             }
             Vector2Int[] adjacentPositions = {
@@ -133,26 +130,25 @@ public class DeterminePath : BaseState
                 (0,+1),//up
                 (0,-1)//down
             };
-            for (int posIndex = 0; posIndex < adjacentPositions.Length; posIndex++) {      
-                // if (node.heuristic > 8) // 
-                // {
-                //     while (validatePosition(adjacentPositions[posIndex], roads, parentDict) && !isIntersection(roads, adjacentPositions[posIndex]))
-                //     {
-                //         adjacentPositions[posIndex] = new Vector2Int(adjacentPositions[posIndex].x + translations[posIndex].Item1, adjacentPositions[posIndex].y + translations[posIndex].Item2);
-                //     }
-                // }
+            for (int posIndex = 0; posIndex < adjacentPositions.Length; posIndex++) {
+                if (node.heuristic > 8) 
+                {
+                    while (validatePosition(adjacentPositions[posIndex], roads, parentDict) && !isIntersection(roads, adjacentPositions[posIndex]))
+                    {
+                        adjacentPositions[posIndex] = new Vector2Int(adjacentPositions[posIndex].x + translations[posIndex].Item1, adjacentPositions[posIndex].y + translations[posIndex].Item2);
+                    }
+                }
                 if (validatePosition(adjacentPositions[posIndex], roads, parentDict))
                 {
                     nodes.Insert(index++, new HeapNode(node.pathCost + 1, adjacentPositions[posIndex], dest));
                     parentDict.Add(adjacentPositions[posIndex], node.position);
                 }
             }
-            index += 1;
         }
         nodes.Clear();
-        //Debug.Log("Loop exited");
-        Stack<Vector2Int> path = new Stack<Vector2Int>();
-        path.Push(dest);
+        if (parentDict.ContainsKey(finalPos)) { 
+            path.Push(dest);
+        }
         while(parentDict.ContainsKey(finalPos))
         {
             if(!roads[finalPos.x,finalPos.y])
@@ -165,6 +161,7 @@ public class DeterminePath : BaseState
             parentDict.Remove(temp);
         }
         self.setPathPositions(path);
+        Exit();
     }
     protected override void Exit()
     {

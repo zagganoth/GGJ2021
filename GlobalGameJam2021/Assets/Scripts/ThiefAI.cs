@@ -8,8 +8,11 @@ public class ThiefAI : MonoBehaviour
     HashSet<Vector2Int> visitedLocations;
     Stack<Vector2Int> currentPath;
     Vector2Int destination;
+    GameObject destinationBuilding;
     public Vector3 curStraightDest;
+    [SerializeField]
     bool visitedEverything;
+    [SerializeField]
     bool pathActive;
 
     [Header("Agent settings")]
@@ -26,7 +29,8 @@ public class ThiefAI : MonoBehaviour
     bool loopAfterVisitingAll;
     [SerializeField]
     bool onlyVisitDestinationsOnce;
-
+    [SerializeField]
+    BaseState state;
     void Start()
     {
         curStraightDest = transform.position;
@@ -39,15 +43,17 @@ public class ThiefAI : MonoBehaviour
     public void changeState(BaseState newState)
     {
         var clone = Instantiate(newState);
+        state = clone;
         clone.Enter(this);
         StartCoroutine(clone.Perform());
         currentState = newState;
     }
 
-    public void setDestination(Vector2Int dest)
+    public void setDestination(Vector2Int dest, GameObject building)
     {
         pathActive = true;
-        destination = dest; 
+        destination = dest;
+        destinationBuilding = building;
     }
     public Vector2Int getDestination()
     {
@@ -77,7 +83,7 @@ public class ThiefAI : MonoBehaviour
     }
     IEnumerator clearVisited()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(5f);
         visitedEverything = false;
         visitedLocations = new HashSet<Vector2Int>();
         changeState(startState);
@@ -88,17 +94,31 @@ public class ThiefAI : MonoBehaviour
         currentPath = pos;
         if(currentPath.Count == 0)
         {
-            //Debug.Log("No path found to " + destination);
+            pathActive = false;
             return;
         }
         var tempDest = currentPath.Pop();
-        curStraightDest = new Vector3(tempDest.x, 0.0f, tempDest.y);
-        pathActive = true;
+        curStraightDest = new Vector3(tempDest.x, 0.1f, tempDest.y);
         //Debug.Log("Moving towards: " + curStraightDest);
     }
     private IEnumerator waitThenMove()
     {
-        yield return new WaitForSeconds(0.1f);
+
+        state = startState;
+        Renderer childRenderer;
+        if (isThief)
+        {
+            childRenderer = destinationBuilding.transform.GetChild(0).GetComponent<Renderer>();
+            Material cur = childRenderer.material;
+            childRenderer.material = mapStance.red;
+            yield return new WaitForSeconds(5f);
+
+            childRenderer.material = cur;
+        }
+        else
+        {
+            yield return new WaitForSeconds(5f);
+        }
         //Debug.Log("Then moving");
         changeState(startState);
     }

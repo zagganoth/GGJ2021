@@ -58,3 +58,11 @@ The following packages were updated:
   com.unity.test-framework from version 1.1.14 to 1.1.19
   com.unity.textmeshpro from version 2.0.1 to 3.0.3
   com.unity.timeline from version 1.2.14 to 1.5.1-pre.3
+
+=== Sat Jan 30 23:14:36 2021
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.render-pipelines.universal from version 8.3.1 to 11.0.0

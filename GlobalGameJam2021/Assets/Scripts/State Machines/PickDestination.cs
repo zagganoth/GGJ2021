@@ -18,17 +18,17 @@ public class PickDestination : BaseState
 
         HashSet<Vector2Int> visited = self.getVisitedLocations();
 
-        if(visited.Count == mapStance.destinationLocations.Count)
+        if(visited.Count == mapStance.destinations.Count)
         {
             self.setVisitedEverything();
             Exit();
         }
         List<Vector2Int> visitable = new List<Vector2Int>();
-        foreach (var dest in mapStance.destinationLocations)
+        foreach (var dest in mapStance.destinations)
         {
-            if (!visited.Contains(dest))
+            if (!visited.Contains(dest.Key))
             {
-                visitable.Add(dest);
+                visitable.Add(dest.Key);
             }
         }
         int locInt = Random.Range(0, visitable.Count);
@@ -37,7 +37,7 @@ public class PickDestination : BaseState
         {
             if (curIndex == locInt)
             {
-                self.setDestination(loc);
+                self.setDestination(loc, mapStance.destinations[loc]);
                 self.visitLocation(loc);
                 break;
             }
