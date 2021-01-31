@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
@@ -36,10 +37,12 @@ public class MapGenerator : MonoBehaviour
     public List<Texture2D> possibleCarTextures;
     public Material red;
     public GameObject newsFlare;
+    public string lastDestination;
 
     public int normieCount = 0;
     public int targetNormieCount = 60;
     public int maxNormieCount = 60;
+    public TMP_Text bannerText;
 
     private void Awake()
     {
@@ -49,7 +52,11 @@ public class MapGenerator : MonoBehaviour
         }
         instance = this;
         destinations = new Dictionary<Vector2Int, GameObject>();
-
+        bannerText.text = "Warning! Wanted robber on the loose, keep an eye on any high profile buildings!.";
+    }
+    public void updateBanner(string robbedBuilding, bool isStealing)
+    {
+        bannerText.text = isStealing ? "Warning! A thief is currently robbing a " + robbedBuilding : "Warning! A thief has just stolen from a " + robbedBuilding;
     }
     // Start is called before the first frame update
     void Start()

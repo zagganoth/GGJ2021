@@ -112,8 +112,9 @@ public class ThiefAI : MonoBehaviour
             Material cur = childRenderer.material;
             childRenderer.material = mapStance.red;
             Instantiate(mapStance.newsFlare, Vector3.zero, Quaternion.identity);
+            mapStance.updateBanner(destinationBuilding.tag, true);
             yield return new WaitForSeconds(5f);
-
+            mapStance.updateBanner(destinationBuilding.tag, false);
             childRenderer.material = cur;
         }
         else
