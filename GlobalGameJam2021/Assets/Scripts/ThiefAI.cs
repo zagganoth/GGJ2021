@@ -76,7 +76,7 @@ public class ThiefAI : MonoBehaviour
     }
     IEnumerator clearVisited()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(0.1f);
         visitedEverything = false;
         visitedLocations = new HashSet<Vector2Int>();
         changeState(startState);
@@ -97,7 +97,7 @@ public class ThiefAI : MonoBehaviour
     }
     private IEnumerator waitThenMove()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(0.1f);
         //Debug.Log("Then moving");
         changeState(startState);
     }

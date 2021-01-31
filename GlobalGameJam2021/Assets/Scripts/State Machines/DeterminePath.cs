@@ -13,7 +13,7 @@ public class DeterminePath : BaseState
         public Vector2Int position;
         Vector2Int dest;
         public int pathCost;
-        float heuristic;
+        public float heuristic;
         public float f;
         public HeapNode(int depth, Vector2Int curPos, Vector2Int destination)
         {
@@ -45,10 +45,6 @@ public class DeterminePath : BaseState
     {
         mapStance = MapGenerator.instance;
 
-    }
-    private float heuristic(Vector2Int src, Vector2Int dest)
-    {
-        return Vector2Int.Distance(src, dest);
     }
     private bool isIntersection(bool[,] roads, Vector2Int position)
     {
@@ -86,6 +82,11 @@ public class DeterminePath : BaseState
             return new Vector2Int(nodeX, nodeY + 1);
         }
     }
+    private bool validatePosition(Vector2Int position, bool[,] allowedPositions, Dictionary<Vector2Int, Vector2Int> parentDict)
+    {
+        return position.y >= 0 && position.y < allowedPositions.GetLength(1) && position.x >= 0 && position.x < allowedPositions.GetLength(0)
+            && allowedPositions[position.x, position.y] && !parentDict.ContainsKey(position);
+    } 
     public override IEnumerator Perform()
     {
         yield return null;
@@ -101,21 +102,18 @@ public class DeterminePath : BaseState
         }
         dest = getAdjacentRoad(roads, dest);
         Vector2Int convertedPos = new Vector2Int(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.z));
-        //Debug.Log("Current position of " + self + " is " + convertedPos);
-        //Debug.Log("Destination is " + dest);
-        //Tuple<Vector2Int, Vector2Int> node;
         PriorityQueue<HeapNode> nodes = new PriorityQueue<HeapNode>(1000);
         nodes.Insert(1, new HeapNode(0, convertedPos,dest));
         Vector2Int finalPos = dest;
         int index = 0;
         while(nodes.Count > 0)
         {
-            //Debug.Log("On iteration " + index);
+            if(index > 500)
+            {
+                Debug.Log("Too many iterations needed to determine pathing for this AI. There is probably a bug causing this");
+                break;
+            }
             var node = nodes.Pop();
-            //Debug.Log(nodes);
-            //Debug.Log("This line runs.");
-            //Debug.Log("Exploring position: " + node.position);
-            //Debug.Log("current f is " + node.f);
             int nodeX = node.position.x;
             int nodeY = node.position.y;
             if(node.position == dest)
@@ -123,76 +121,43 @@ public class DeterminePath : BaseState
                 finalPos = node.position;
                 break;
             }
-            Vector2Int left = new Vector2Int(nodeX - 1, nodeY);
-            if (node.f > 8)
-            {
-                while (left.x >= 0 && !isIntersection(roads, left))
+            Vector2Int[] adjacentPositions = {
+                new Vector2Int(nodeX - 1, nodeY), //left
+                new Vector2Int(nodeX + 1, nodeY), //right
+                new Vector2Int(nodeX, nodeY + 1), //up
+                new Vector2Int(nodeX, nodeY - 1) //down
+            };
+            var translations = new[] {
+                (-1,0),//left
+                (+1,0),//right
+                (0,+1),//up
+                (0,-1)//down
+            };
+            for (int posIndex = 0; posIndex < adjacentPositions.Length; posIndex++) {      
+                if (node.heuristic > 8) // 
                 {
-                    left = new Vector2Int(left.x - 1, nodeY);
+                    while (validatePosition(adjacentPositions[posIndex], roads, parentDict) && !isIntersection(roads, adjacentPositions[posIndex]))
+                    {
+                        adjacentPositions[posIndex] = new Vector2Int(adjacentPositions[posIndex].x + translations[posIndex].Item1, adjacentPositions[posIndex].y + translations[posIndex].Item2);
+                    }
                 }
-            }
-            Vector2Int right = new Vector2Int(nodeX + 1, nodeY);
-            if (node.f > 8)
-            {
-                while (right.x < roads.GetLength(0) && !isIntersection(roads, right))
+                if (validatePosition(adjacentPositions[posIndex], roads, parentDict))
                 {
-                    right = new Vector2Int(right.x + 1, nodeY);
+                    nodes.Insert(index++, new HeapNode(node.pathCost + 1, adjacentPositions[posIndex], dest));
+                    parentDict.Add(adjacentPositions[posIndex], node.position);
                 }
-            }
-            Vector2Int up = new Vector2Int(nodeX, nodeY + 1);
-            if (node.f > 8)
-            {
-                while (up.y < roads.GetLength(1) && !isIntersection(roads, up))
-                {
-                    up = new Vector2Int(nodeX, up.y + 1);
-                }
-
-            }
-            Vector2Int down = new Vector2Int(nodeX, nodeY - 1);
-            if (node.f > 8)
-            {
-                while (down.y >= 0 && !isIntersection(roads, down))
-                {
-                    down = new Vector2Int(nodeX, down.y - 1);
-                }
-            }
-            //left
-            if (left.y >= 0 && left.y < roads.GetLength(1) && left.x >= 0 && left.x < roads.GetLength(0) && roads[left.x,left.y] && !parentDict.ContainsKey(left))
-            {
-                //Debug.Log("Left is valid");
-                nodes.Insert(index++, new HeapNode(node.pathCost + 1, left, dest));
-                parentDict.Add(left, node.position);
-            }
-            //right
-            if(right.y >= 0 && right.y < roads.GetLength(1) && right.x >= 0 && right.x < roads.GetLength(0) && roads[right.x,right.y] && !parentDict.ContainsKey(right))
-            {
-                //Debug.Log("right is valid");
-                nodes.Insert(index++, new HeapNode(node.pathCost + 1, right, dest));
-                parentDict.Add(right, node.position);
-            }//up
-            if (up.y >= 0 && up.y < roads.GetLength(1) && up.x >= 0 && up.x < roads.GetLength(0) && roads[up.x,up.y]  && !parentDict.ContainsKey(up))
-            {
-                //Debug.Log("Up is valid");
-                nodes.Insert(index++, new HeapNode(node.pathCost + 1, up, dest));
-                parentDict.Add(up, node.position);
-            }//down
-            if (down.y >= 0 && down.y < roads.GetLength(1) && down.x >= 0 && down.x < roads.GetLength(0) && roads[down.x,down.y]  && !parentDict.ContainsKey(down))
-            {
-                //Debug.Log("down is valid");
-                nodes.Insert(index++, new HeapNode(node.pathCost + 1, down, dest));
-                parentDict.Add(down, node.position);
             }
             index += 1;
         }
         nodes.Clear();
-        //Debug.Log("Loop exited");
+        Debug.Log("Loop exited");
         Stack<Vector2Int> path = new Stack<Vector2Int>();
-        path.Push(origDest);
+        path.Push(dest);
         while(parentDict.ContainsKey(finalPos))
         {
             if(!roads[finalPos.x,finalPos.y])
             {
-                Debug.LogError("HOW ?");
+                Debug.LogError("Parent not found for something on path. Something is very wrong.");
             }
             path.Push(finalPos);
             var temp = finalPos;
@@ -200,12 +165,6 @@ public class DeterminePath : BaseState
             parentDict.Remove(temp);
         }
         self.setPathPositions(path);
-        /*
-        foreach(Vector2Int posit in path)
-        {
-            Debug.Log(posit);
-        }*/
-        //yield return null;
     }
     protected override void Exit()
     {
