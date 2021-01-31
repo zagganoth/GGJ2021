@@ -83,8 +83,9 @@ public class MapGenerator : MonoBehaviour
                         obj.GetComponentInChildren<MeshRenderer>().material.SetTexture("_MainTex",possibleCarTextures[randomColor]);
                         obj.GetComponent<ThiefAI>().colorIndex = randomColor;
                         obj.GetComponent<ThiefAI>().vehicleIndex = random;
+                        obj.GetComponent<ThiefAI>().speed *= Random.Range(0.8f, 1.2f);
                         obj.transform.SetParent(trafficParent);
-                        if(!placedCriminal){
+                        if(!placedCriminal && random != 2){
                             obj.GetComponent<ThiefAI>().isThief = true;
                             placedCriminal = true;
                             obj.transform.localScale = new Vector3(1, 1, 1);

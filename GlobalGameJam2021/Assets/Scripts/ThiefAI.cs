@@ -23,8 +23,7 @@ public class ThiefAI : MonoBehaviour
     
     [SerializeField]
     BaseState startState;
-    [SerializeField]
-    float speed;
+    public float speed;
     [SerializeField]
     bool loopAfterVisitingAll;
     [SerializeField]
