@@ -13,8 +13,9 @@ public class HintSystem : MonoBehaviour
 
     int hintSlot1;
     int hintSlot2;
-    [SerializeField] TMP_Text hintNumberOne;
-    [SerializeField] TMP_Text hintNumberTwo;
+    [SerializeField] TMP_Text alwaysTrueHint;
+    [SerializeField] TMP_Text dubiousHint1;
+    [SerializeField] TMP_Text dubiousHint2;
 
     List<string> trueHints = new List<string>();
     List<string> falseHints = new List<string>();
@@ -70,18 +71,20 @@ public class HintSystem : MonoBehaviour
         return vehicleNames;
     }
 
-    public void SendHint()
+    public void SetHints()
     {
-        hintSlot1 = SetHintSlotOne();
-        if (hintSlot1 == 0)
-        {
-            hintNumberOne.text = GetTrueHint();
-            hintNumberTwo.text = GetFalseHint();
-        }
-        else if (hintSlot1 == 1)
-        {
-            hintNumberOne.text = GetFalseHint();
-            hintNumberTwo.text = GetTrueHint();
+        alwaysTrueHint.text = GetTrueHint();
+
+        string trueRumor = GetTrueHint();
+        string falseRumor = GetFalseHint();
+
+        bool randomOrder = UnityEngine.Random.Range(0.0f, 1.0f) >= 0.5f ;
+        if(randomOrder){
+            dubiousHint1.text = trueRumor;
+            dubiousHint2.text = falseRumor;
+        }else{
+            dubiousHint1.text = falseRumor;
+            dubiousHint2.text = trueRumor;
         }
     }
 

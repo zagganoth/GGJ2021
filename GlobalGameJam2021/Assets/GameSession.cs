@@ -63,7 +63,7 @@ public class GameSession : MonoBehaviour
         timeSinceLastHint += Time.deltaTime;
         if (timeSinceLastHint >= hintInterval)
         {
-            hintSystem.SendHint();
+            hintSystem.SetHints();
             timeSinceLastHint = 0f;
         }
         else { return; }
