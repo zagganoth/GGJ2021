@@ -3,12 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ShirtColour
-{
-    Red,
-    Blue,
-    Yellow,
-}
+
 
 public class Criminal : MonoBehaviour
 {

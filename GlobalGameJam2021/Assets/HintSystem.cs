@@ -23,6 +23,15 @@ public class HintSystem : MonoBehaviour
     public string[] colorNames;
     public string[] vehicleNames;
 
+    public string[] GetColorNames()
+    {
+        return colorNames;
+    }
+    public string[] GetVehicleNames()
+    {
+        return vehicleNames;
+    }
+
     public void SendHint()
     {
         hintSlot1 = SetHintSlotOne();

@@ -6,7 +6,7 @@ using TMPro;
 
 public class Date : MonoBehaviour
 {
-    [SerializeField] GameSession gameSession;
+    GameSession gameSession;
     float timeRemaining;
     float oneDay;
 
@@ -14,6 +14,7 @@ public class Date : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameSession = GetComponent<GameSession>();
         timeRemaining = gameSession.GetDuaration();
         oneDay = gameSession.GetDuaration() / 5;
     }
@@ -22,7 +23,6 @@ public class Date : MonoBehaviour
     void Update()
     {
         timeRemaining -= Time.deltaTime;
-        print(timeRemaining);
         if (timeRemaining > (oneDay * 4))
         {
             dateBox.text = "MON JAN 01";

@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class ClickHandler : MonoBehaviour
 {
+    [SerializeField] Canvas detailsPanel;
     // Start is called before the first frame update
     void Start()
     {
-        
+        detailsPanel.enabled = false;
     }
 
     // Update is called once per frame
@@ -15,6 +16,7 @@ public class ClickHandler : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            detailsPanel.enabled = false;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             // Casts the ray and get the first game object hit
@@ -23,6 +25,8 @@ public class ClickHandler : MonoBehaviour
             GameObject other = hit.collider.gameObject;
             if(other.GetComponent<ThiefAI>()){
                 var thief = other.GetComponent<ThiefAI>();
+                detailsPanel.enabled = true;
+                detailsPanel.GetComponent<DetailsPanel>().UpdatePanelText(thief.colorIndex, thief.vehicleIndex);
                 Debug.Log(thief.colorIndex);
             }
         }

@@ -57,15 +57,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Criminal.cs" />
+    <Compile Include="Assets\DetailsPanel.cs" />
     <Compile Include="Assets\Scripts\PriorityQueue.cs" />
     <Compile Include="Assets\GameSession.cs" />
+    <Compile Include="Assets\Date.cs" />
     <Compile Include="Assets\Scripts\MapGenerator.cs" />
+    <Compile Include="Assets\ClickHandler.cs" />
     <Compile Include="Assets\Scripts\State Machines\BaseState.cs" />
     <Compile Include="Assets\Scripts\ThiefAI.cs" />
     <Compile Include="Assets\HintSystem.cs" />
     <Compile Include="Assets\Scripts\State Machines\DeterminePath.cs" />
     <Compile Include="Assets\Scripts\State Machines\PickDestination.cs" />
-    <Compile Include="Assets\Date.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
