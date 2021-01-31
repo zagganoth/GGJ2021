@@ -96,6 +96,7 @@ public class GameSession : MonoBehaviour
     private void GameOver()
     {
         print("the game is over");
+        GetComponent<GameOver>().GameOverUI();
     }
 
     public float GetDuaration()
