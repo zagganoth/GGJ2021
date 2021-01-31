@@ -89,11 +89,16 @@ public class DeterminePath : BaseState
     public override IEnumerator Perform()
     {
         yield return null;
+
         parentDict = new Dictionary<Vector2Int, Vector2Int>();
         Vector2Int dest = self.getDestination();
         Vector2Int origDest = dest;
         Vector3 pos = self.getPos();
         bool[,] roads = mapStance.roads;
+        if (roads.Length == 0)
+        {
+            Exit();
+        }
         dest = getAdjacentRoad(roads, dest);
         Vector2Int convertedPos = new Vector2Int(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.z));
         //Debug.Log("Current position of " + self + " is " + convertedPos);
