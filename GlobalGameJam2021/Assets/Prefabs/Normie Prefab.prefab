@@ -51,7 +51,6 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -127,11 +126,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curStraightDest: {x: 0, y: 0, z: 0}
+  visitedEverything: 0
+  pathActive: 0
   isThief: 0
   colorIndex: 0
   vehicleIndex: 0
   currentState: {fileID: 0}
   startState: {fileID: 11400000, guid: 3c2faf7d0b090aa40a25792cdcc3cb32, type: 2}
-  speed: 1.5
+  speed: 0.2
   loopAfterVisitingAll: 1
   onlyVisitDestinationsOnce: 1
+  state: {fileID: 0}
