@@ -93,14 +93,14 @@ public class DeterminePath : BaseState
         parentDict = new Dictionary<Vector2Int, Vector2Int>();
         Vector2Int dest = self.getDestination();
         Vector2Int origDest = dest;
-        Vector3 pos = self.getPos();
+        Vector3 pos = self.transform.position;
         bool[,] roads = mapStance.roads;
         if (roads.Length == 0)
         {
             Exit();
         }
         dest = getAdjacentRoad(roads, dest);
-        Vector2Int convertedPos = new Vector2Int(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.z));
+        Vector2Int convertedPos = new Vector2Int(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.z));
         //Debug.Log("Current position of " + self + " is " + convertedPos);
         //Debug.Log("Destination is " + dest);
         //Tuple<Vector2Int, Vector2Int> node;
@@ -149,7 +149,7 @@ public class DeterminePath : BaseState
 
             }
             Vector2Int down = new Vector2Int(nodeX, nodeY - 1);
-            if (node.f >8)
+            if (node.f > 8)
             {
                 while (down.y >= 0 && !isIntersection(roads, down))
                 {
@@ -157,26 +157,26 @@ public class DeterminePath : BaseState
                 }
             }
             //left
-            if (nodeX - 1 >= 0 && roads[nodeX-1,nodeY] && !parentDict.ContainsKey(left))
+            if (left.y >= 0 && left.y < roads.GetLength(1) && left.x >= 0 && left.x < roads.GetLength(0) && roads[left.x,left.y] && !parentDict.ContainsKey(left))
             {
                 //Debug.Log("Left is valid");
                 nodes.Insert(index++, new HeapNode(node.pathCost + 1, left, dest));
                 parentDict.Add(left, node.position);
             }
             //right
-            if(nodeX + 1 < roads.GetLength(0) && roads[nodeX + 1, nodeY] && !parentDict.ContainsKey(right))
+            if(right.y >= 0 && right.y < roads.GetLength(1) && right.x >= 0 && right.x < roads.GetLength(0) && roads[right.x,right.y] && !parentDict.ContainsKey(right))
             {
                 //Debug.Log("right is valid");
                 nodes.Insert(index++, new HeapNode(node.pathCost + 1, right, dest));
                 parentDict.Add(right, node.position);
             }//up
-            if (nodeY + 1 < roads.GetLength(1) && roads[nodeX,nodeY+1] && !parentDict.ContainsKey(up))
+            if (up.y >= 0 && up.y < roads.GetLength(1) && up.x >= 0 && up.x < roads.GetLength(0) && roads[up.x,up.y]  && !parentDict.ContainsKey(up))
             {
                 //Debug.Log("Up is valid");
                 nodes.Insert(index++, new HeapNode(node.pathCost + 1, up, dest));
                 parentDict.Add(up, node.position);
             }//down
-            if (nodeY - 1 >= 0 && roads[nodeX,nodeY-1] && !parentDict.ContainsKey(down))
+            if (down.y >= 0 && down.y < roads.GetLength(1) && down.x >= 0 && down.x < roads.GetLength(0) && roads[down.x,down.y]  && !parentDict.ContainsKey(down))
             {
                 //Debug.Log("down is valid");
                 nodes.Insert(index++, new HeapNode(node.pathCost + 1, down, dest));
@@ -199,7 +199,7 @@ public class DeterminePath : BaseState
             finalPos = parentDict[finalPos];
             parentDict.Remove(temp);
         }
-        self.setPositions(path);
+        self.setPathPositions(path);
         /*
         foreach(Vector2Int posit in path)
         {
