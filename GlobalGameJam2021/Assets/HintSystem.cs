@@ -61,6 +61,15 @@ public class HintSystem : MonoBehaviour
         }
     }
 
+    public string[] GetColorNames()
+    {
+        return colorNames;
+    }
+    public string[] GetVehicleNames()
+    {
+        return vehicleNames;
+    }
+
     public void SendHint()
     {
         hintSlot1 = SetHintSlotOne();

@@ -51,6 +51,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -91,7 +92,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8023968293035196987}
   - component: {fileID: 8023968293035196991}
-  - component: {fileID: -5681515121341885744}
   m_Layer: 0
   m_Name: Normie Prefab
   m_TagString: Untagged
@@ -127,27 +127,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curStraightDest: {x: 0, y: 0, z: 0}
-  visitedEverything: 0
-  pathActive: 0
   isThief: 0
   colorIndex: 0
   vehicleIndex: 0
   currentState: {fileID: 0}
   startState: {fileID: 11400000, guid: 3c2faf7d0b090aa40a25792cdcc3cb32, type: 2}
-  speed: 0.2
+  speed: 1.5
   loopAfterVisitingAll: 1
-  onlyVisitDestinationsOnce: 0
-  state: {fileID: 0}
---- !u!65 &-5681515121341885744
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8023968293035196990}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.15, y: 0.2, z: 0.15}
-  m_Center: {x: -0.42, y: 0.1, z: 0}
+  onlyVisitDestinationsOnce: 1

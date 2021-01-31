@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class GameSession : MonoBehaviour
 {
     HintSystem hintSystem;
-
+    [SerializeField] Canvas detailsPanel;
     //TIMER CODE
     private TimeSpan gameTime;
     private TimeSpan gameDuration;
@@ -25,6 +25,7 @@ public class GameSession : MonoBehaviour
 
     void Start()
     {
+        detailsPanel.enabled = false;
         BeginTimer();
         hintSystem = FindObjectOfType<HintSystem>();
     }
@@ -42,9 +43,8 @@ public class GameSession : MonoBehaviour
             GameObject other = hit.collider.gameObject;
             if(other.GetComponent<ThiefAI>()){
                 currentAccusation = other.GetComponent<ThiefAI>();
-                if(currentAccusation == currentCriminal){
-                    Debug.Log("you win");
-                }
+                detailsPanel.enabled = true;
+                detailsPanel.GetComponent<DetailsPanel>().UpdatePanelText(currentAccusation.colorIndex, currentAccusation.vehicleIndex);
             }
         }
     }
