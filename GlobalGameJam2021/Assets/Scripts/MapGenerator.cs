@@ -44,7 +44,8 @@ public class MapGenerator : MonoBehaviour
     public int normieCount = 0;
     public int targetNormieCount = 60;
     public int maxNormieCount = 60;
-    public TMP_Text bannerText;
+    //public TMP_Text bannerText;
+    public string bannerText;
     [SerializeField]
     public TMP_Text robbedAmountText;
     
@@ -59,13 +60,13 @@ public class MapGenerator : MonoBehaviour
         instance = this;
         destinations = new Dictionary<Vector2Int, GameObject>();
         normalBuildings = new Dictionary<Vector2Int, GameObject>();
-        bannerText.text = "Warning! Wanted robber on the loose, keep an eye on any high profile buildings!";
+        bannerText = "Warning! Wanted robber on the loose, keep an eye on any high profile buildings!";
         robbedAmount = 0;
         robbedAmountText.text = "Total Damages: $0";
     }
     public void updateBanner(string robbedBuilding, bool isStealing)
     {
-        bannerText.text = isStealing ? "Warning! The thief is currently robbing a " + robbedBuilding : "Warning! The thief has just stolen from a " + robbedBuilding;
+        bannerText = isStealing ? "Warning! The thief is currently robbing a " + robbedBuilding : "Warning! The thief has just stolen from a " + robbedBuilding;
     }
     public void addRobbedAmount()
     {

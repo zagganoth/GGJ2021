@@ -9,6 +9,7 @@ TagManager:
   - Research Lab
   - Art Gallery
   - Bank
+  - Building
   layers:
   - Default
   - TransparentFX
