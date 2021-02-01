@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 public class GameWin : MonoBehaviour
 {
     [SerializeField] Canvas gameWinCanvas;
+    [SerializeField] GameObject gameOverSound;
+    public GameObject music;
 
     void Start()
     {
@@ -16,6 +18,8 @@ public class GameWin : MonoBehaviour
     public void GameWinUI()
     {
         gameWinCanvas.enabled = true;
+        Instantiate(gameOverSound,Vector3.zero, Quaternion.identity);
+        music.SetActive(false);
     }
 
     public void RestartGame()

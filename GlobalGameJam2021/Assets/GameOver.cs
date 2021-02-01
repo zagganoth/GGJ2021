@@ -8,6 +8,9 @@ public class GameOver : MonoBehaviour
 {
 
     [SerializeField] Canvas gameOverCanvas;
+    [SerializeField] GameObject gameOverSound;
+    public GameObject music;
+
 
     void Start()
     {
@@ -17,6 +20,8 @@ public class GameOver : MonoBehaviour
     public void GameOverUI()
     {
         gameOverCanvas.enabled = true;
+        Instantiate(gameOverSound,Vector3.zero, Quaternion.identity);
+        music.SetActive(false);
     }
 
     public void RestartGame()

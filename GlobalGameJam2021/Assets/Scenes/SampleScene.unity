@@ -1811,6 +1811,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameOverCanvas: {fileID: 1153783643}
+  gameOverSound: {fileID: 456905584520602041, guid: e3c95d6ccc6761448840aff5b97d37ea,
+    type: 3}
+  music: {fileID: 1768494030}
 --- !u!114 &1905850253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1824,6 +1827,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameWinCanvas: {fileID: 2089894058}
+  gameOverSound: {fileID: 5118787887735571387, guid: a4b066041f033904db457428ad36bc6a,
+    type: 3}
+  music: {fileID: 1768494030}
 --- !u!114 &1905850254
 MonoBehaviour:
   m_ObjectHideFlags: 0
