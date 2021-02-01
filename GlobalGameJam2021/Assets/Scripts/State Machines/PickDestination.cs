@@ -44,7 +44,8 @@ public class PickDestination : BaseState
     public override IEnumerator Perform()
     {
         yield return null;
-        if (self.isThief)
+        bool shouldThiefSteal = self.justStolen ? Random.Range(0f, 1f) > 0.9f : Random.Range(0f, 1f) > 0.2f;
+        if (self.isThief && shouldThiefSteal)
         {
             PickThiefDestination();
         }
