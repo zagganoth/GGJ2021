@@ -30,6 +30,7 @@ public class ThiefAI : MonoBehaviour
     bool onlyVisitDestinationsOnce;
     [SerializeField]
     BaseState state;
+    public bool justStolen;
     void Start()
     {
         curStraightDest = transform.position;
@@ -38,6 +39,12 @@ public class ThiefAI : MonoBehaviour
         visitedEverything = false;
         pathActive = false;
         mapStance = MapGenerator.instance;
+        justStolen = false;
+        if(isThief)
+        {
+            onlyVisitDestinationsOnce = true;
+            loopAfterVisitingAll = true;
+        }
     }
     public void changeState(BaseState newState)
     {
@@ -105,20 +112,28 @@ public class ThiefAI : MonoBehaviour
 
         state = startState;
         Renderer childRenderer;
-        if (isThief)
+        if (isThief && !destinationBuilding.CompareTag("Building"))
         {
             childRenderer = destinationBuilding.transform.GetChild(0).GetComponent<Renderer>();
             Material cur = childRenderer.material;
             childRenderer.material = mapStance.red;
             Instantiate(mapStance.newsFlare, Vector3.zero, Quaternion.identity);
             mapStance.updateBanner(destinationBuilding.tag, true);
-            yield return new WaitForSeconds(5f);
-            mapStance.updateBanner(destinationBuilding.tag, false);
+            yield return new WaitForSeconds(0.25f);
             childRenderer.material = cur;
+            yield return new WaitForSeconds(1f);
+            childRenderer.material = mapStance.red;
+            yield return new WaitForSeconds(0.25f);
+            childRenderer.material = cur;
+            yield return new WaitForSeconds(1.75f);
+            mapStance.updateBanner(destinationBuilding.tag, false);
+            mapStance.addRobbedAmount();
+            justStolen = true;
         }
         else
         {
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(Random.Range(0.1f,10f));
+            justStolen = false;
         }
         //Debug.Log("Then moving");
         changeState(startState);

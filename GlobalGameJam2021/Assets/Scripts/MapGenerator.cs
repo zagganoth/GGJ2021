@@ -45,6 +45,10 @@ public class MapGenerator : MonoBehaviour
     public int targetNormieCount = 60;
     public int maxNormieCount = 60;
     public TMP_Text bannerText;
+    [SerializeField]
+    public TMP_Text robbedAmountText;
+    
+    int robbedAmount;
 
     private void Awake()
     {
@@ -56,10 +60,17 @@ public class MapGenerator : MonoBehaviour
         destinations = new Dictionary<Vector2Int, GameObject>();
         normalBuildings = new Dictionary<Vector2Int, GameObject>();
         bannerText.text = "Warning! Wanted robber on the loose, keep an eye on any high profile buildings!";
+        robbedAmount = 0;
+        robbedAmountText.text = "Total Damages: $0";
     }
     public void updateBanner(string robbedBuilding, bool isStealing)
     {
         bannerText.text = isStealing ? "Warning! The thief is currently robbing a " + robbedBuilding : "Warning! The thief has just stolen from a " + robbedBuilding;
+    }
+    public void addRobbedAmount()
+    {
+        robbedAmount += Random.Range(800, 1400);
+        robbedAmountText.text = "Total Damages: $" + robbedAmount;
     }
     // Start is called before the first frame update
     void Start()
