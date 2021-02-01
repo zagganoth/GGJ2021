@@ -34,7 +34,7 @@ public class DoScroll : MonoBehaviour
         childText.text = mapStance.bannerText;
         transform.Translate(Vector3.left * Time.deltaTime * scrollSpeed);
         Debug.Log(transform.position);
-        if(transform.position.x < 200)
+        if(transform.position.x < 0)
         {
             transform.position = origPosition + new Vector3(1920,0,0);
         }
